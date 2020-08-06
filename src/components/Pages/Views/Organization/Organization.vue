@@ -155,7 +155,7 @@
     },
     created: function () {
       this.$store.dispatch('common/setMenuTitle', "조직도");
-      this.changePage(1);
+      // this.changePage(1);
     },
     methods: {
       tableRowStyle() {

@@ -2,7 +2,7 @@
   <navbar navbar-menu-classes="navbar-right" v-model="showMenu">
     <div class="navbar-wrapper">
       <router-link to="/home" class="navbar-nav" tag="li">
-        <a class="navbar-brand" href="/">Comvoy Management Console</a>
+        <a class="navbar-brand" href="/">Z-BOX Management Console</a>
       </router-link>
     </div>
 

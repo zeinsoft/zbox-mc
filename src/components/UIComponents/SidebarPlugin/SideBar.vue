@@ -25,6 +25,16 @@
                           style="margin-left: 10px">
             </sidebar-item>
           </sidebar-item>
+          <sidebar-item v-for="(link, index) in sidebarLinks"
+                        :key="link.name + index"
+                        :link="link">
+
+            <sidebar-item v-for="(subLink, index) in link.children"
+                          :key="subLink.name + index"
+                          :link="subLink"
+                          style="margin-left: 10px">
+            </sidebar-item>
+          </sidebar-item>
         </slot>
 
       </ul>
@@ -101,7 +111,7 @@
     },
     created: function () {
         // 메뉴 리스트
-        this.$store.dispatch('account/getMyMenus');
+        // this.$store.dispatch('account/getMyMenus');
     },
     mounted () {
       this.initScrollBarAsync()

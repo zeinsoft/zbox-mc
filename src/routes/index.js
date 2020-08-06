@@ -20,7 +20,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(m => m.meta.auth) && !store.state.auth.authenticated) {
+  // TODO : 권한 설정되면 아래 주석 제거
+  /*if (to.matched.some(m => m.meta.auth) && !store.state.auth.authenticated) {
     next({
       name: 'Login',
     });
@@ -29,7 +30,9 @@ router.beforeEach((to, from, next) => {
       store.dispatch('account/me');
     }
     next();
-  }
+  }*/
+
+  next();
 });
 
 Vue.router = router;

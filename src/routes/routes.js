@@ -1,23 +1,15 @@
 import DefaultLayout from '../components/Pages/Layout/DefaultLayout.vue';
 import NotFound from '../components/GeneralViews/NotFoundPage.vue';
 
-const Overview = () => import('src/components/Pages/Views/Status/Overview.vue');
-const ScoreOverview = () => import('src/components/Pages/Views/Status/ScoreOverview.vue');
-const CheckOverview = () => import('src/components/Pages/Views/Status/CheckOverview.vue');
-
-const PolicySetting = () => import('src/components/Pages/Views/Policy/PolicySetting.vue');
-const InspectItem = () => import('src/components/Pages/Views/Policy/InspectItem.vue');
-const InspectItemRegistration = () => import('src/components/Pages/Views/Policy/InspectItemRegistration.vue');
-
 const Organization = () => import('src/components/Pages/Views/Organization/Organization.vue');
 const UserRegistration = () => import('src/components/Pages/Views/Organization/UserRegistration.vue');
 
-const UserManagement = () => import('src/components/Pages/Views/Setting/UserManagement.vue');
-const UserManagementRegistration = () => import('src/components/Pages/Views/Setting/UserManagementRegistration.vue');
-const Management = () => import('src/components/Pages/Views/Setting/Management.vue');
-const ManagementDetail = () => import('src/components/Pages/Views/Setting/ManagementDetail.vue');
-const Notice = () => import('src/components/Pages/Views/Setting/Notice.vue');
-const Program = () => import('src/components/Pages/Views/Setting/Program.vue');
+const TaskList = () => import('src/components/Pages/Views/Task/TaskList.vue');
+const TaskRegistration = () => import('src/components/Pages/Views/Task/TaskRegistration.vue');
+const ScriptRegistration = () => import('src/components/Pages/Views/Task/ScriptRegistration.vue');
+
+const PlayBookList = () => import('src/components/Pages/Views/PlayBook/PlayBookList.vue');
+const PlayBookRegistration = () => import('src/components/Pages/Views/PlayBook/PlayBookRegistration.vue');
 
 import Login from 'src/components/Pages/Views/Home/Login.vue';
 
@@ -27,145 +19,83 @@ let loginPage = {
   component: Login
 };
 
-/**
- * 보안현황
- * @type {{path: string, component: *, children: *[], name: string}}
- */
-let securityStatus = {
-  path: '/status',
-  name: 'Status',
+let tasks = {
+  path: '/tasks',
+  name: 'Tasks',
   component: DefaultLayout,
   children: [
     {
-      path: 'overview',
-      name: 'StatusOverview',
-      mata: {
+      path: 'list',
+      name: 'TaskList',
+      meta: {
         auth: true,
       },
-      component: Overview
+      component: TaskList
     },
     {
-      path: 'score',
-      name: 'ScoreOverview',
-      mata: {
+      path: 'registration',
+      name: "TaskRegistration",
+      meta: {
         auth: true,
       },
-      component: ScoreOverview
-    }
-    ,
+      component: TaskRegistration
+    },
     {
-      path: 'check',
-      name: 'CheckOverview',
-      mata: {
+      path: ':uuid',
+      name: "TaskEdit",
+      meta: {
         auth: true,
       },
-      component: CheckOverview
+      component: TaskRegistration
+    },
+    {
+      path: ':uuid/scripts/:scriptUuid',
+      name: "ScriptRegistration",
+      meta: {
+        auth: true,
+      },
+      component: ScriptRegistration
     }
   ]
-};
+}
 
-/**
- * 보안운영
- * @type {{path: string, component: *, children: *[], name: string}}
- */
-let securityOperation = {
-  path: '/operation',
-  name: 'Operation',
-  component: DefaultLayout,
-  redirect: '/operation/inspect-item',
-  children: [
-    {
-      path: 'policy',
-      name: 'Policy',
-      mata: {
-        auth: true,
-      },
-      component: PolicySetting
-    },
-    {
-      path: 'inspect-item',
-      name: 'InspectItem',
-      mata: {
-        auth: true,
-      },
-      component: InspectItem
-    },
-    {
-      path: 'inspect-item/registration/:inspectItemId',
-      name: "InspectItemRegistration",
-      meta: {
-        auth: true,
-      },
-      component: InspectItemRegistration
-    },
-  ]
-};
-
-/**
- * 환경설정
- * @type {{path: string, component: *, children: *[], name: string}}
- */
-let setting = {
-  path: '/setting',
-  name: 'Setting',
+let playbooks = {
+  path: '/playbooks',
+  name: 'PlayBooks',
   component: DefaultLayout,
   children: [
     {
-      path: 'user',
-      name: 'User',
-      mata: {
-        auth: true,
-      },
-      component: UserManagement
-    },
-    {
-      path: 'user/registration',
-      name: "UserManagementRegistration",
+      path: 'list',
+      name: 'PlayBookList',
       meta: {
         auth: true,
       },
-      component: UserManagementRegistration
+      component: PlayBookList
     },
     {
-      path: 'management',
-      name: 'Management',
-      mata: {
-        auth: true,
-      },
-      component: Management
-    },
-    {
-      path: 'management/:configId',
-      name: 'ManagementDetail',
-      mata: {
-        auth: true,
-      },
-      component: ManagementDetail
-    },
-    {
-      path: 'notice',
-      name: 'Notice',
-      mata: {
-        auth: true,
-      },
-      component: Notice
-    },
-    {
-      path: 'program',
-      name: 'Program',
+      path: 'registration',
+      name: "PlayBookRegistration",
       meta: {
         auth: true,
       },
-      component: Program
-    }
+      component: PlayBookRegistration
+    },
+    {
+      path: ':uuid',
+      name: "PlayBookEdit",
+      meta: {
+        auth: true,
+      },
+      component: PlayBookRegistration
+    },
   ]
-};
+}
 
 const routes = [
   {
     path: '/',
     component: DefaultLayout,
-    redirect: '/status/overview',
+    redirect: '/organization',
     children: [
       {
         path: 'organization',
@@ -182,9 +112,8 @@ const routes = [
       },
     ]
   },
-  securityStatus,
-  securityOperation,
-  setting,
+  tasks,
+  playbooks,
   loginPage,
   {path: '*', component: NotFound}
 ];

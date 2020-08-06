@@ -38,6 +38,8 @@ import './assets/sass/demo.scss'
 
 import './registerServiceWorker'
 
+import sidebarLinks from './sidebarLinks'
+
 // plugin setup
 Vue.use(CommonUtil)
 Vue.use(VueRouter)
@@ -45,7 +47,7 @@ Vue.use(VueRouterPrefetch)
 Vue.use(GlobalDirectives)
 Vue.use(GlobalComponents)
 Vue.use(VueNotify)
-Vue.use(SideBar)
+Vue.use(SideBar, {sidebarLinks: sidebarLinks})
 const config = {
   locale: 'ko',
   // inject: false
@@ -58,7 +60,7 @@ Vue.use(VeeValidate, config)
 initProgress(router);
 
 store.dispatch('auth/check');
-store.dispatch('account/me');
+// store.dispatch('account/me');
 
 /* eslint-disable no-new */
 new Vue({

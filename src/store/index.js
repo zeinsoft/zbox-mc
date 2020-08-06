@@ -12,6 +12,11 @@ import organization from './modules/organization'
 import sensor from './modules/sensor'
 import config from './modules/config'
 
+
+import task from './modules/task'
+import script from './modules/script'
+import playbook from './modules/playbook'
+
 const debug = process.env.NODE_ENV !== 'production';
 
 export default new Vuex.Store({
@@ -28,6 +33,11 @@ export default new Vuex.Store({
     organization,
     sensor,
     config,
+
+
+    task,
+    script,
+    playbook,
   },
 
   /**

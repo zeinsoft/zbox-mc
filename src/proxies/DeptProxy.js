@@ -7,7 +7,7 @@ class DeptProxy extends Proxy {
    * @param {Object} parameters The query parameters.
    */
   constructor(parameters = {}) {
-    super('api/depts', parameters);
+    super('v1/depts', parameters);
   }
 
   /**

@@ -41,6 +41,11 @@ module.exports = {
         target: 'http://localhost:8086',
         ws: true,
         changeOrigin: true
+      },
+      '/v1': {
+        target: 'http://ec2-3-34-120-207.ap-northeast-2.compute.amazonaws.com:8000',
+        ws: true,
+        changeOrigin: true
       }
     }
   }
