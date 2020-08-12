@@ -11,11 +11,11 @@
           <el-form class="form-horizontal" :model="user" :rules="rules" ref="user" label-width="120px">
             <el-row>
               <el-col :span="24">
-                <el-form-item label="사번" prop="userId">
-                  <el-input v-model="user.userId" :readonly="readonly" />
+                <el-form-item label="사번" prop="code">
+                  <el-input v-model="user.code" :readonly="readonly" />
                 </el-form-item>
-                <el-form-item label="이름" prop="userName">
-                  <el-input v-model="user.userName"></el-input>
+                <el-form-item label="이름" prop="name">
+                  <el-input v-model="user.name"></el-input>
                 </el-form-item>
                 <el-form-item label="부서명" v-if="type === 'edit'">
                   <el-input  v-model="user.deptName" :readonly="readonly"></el-input>
@@ -51,6 +51,7 @@
   import UserProxy from "../../../../proxies/UserProxy";
   import DeptTree from "../Common/DeptTree";
   import DeptProxy from "../../../../proxies/DeptProxy";
+  import MongoProxy from "../../../../proxies/MongoProxy";
 
   Vue.use(Table);
   Vue.use(TableColumn);
@@ -73,14 +74,14 @@
     created: function () {
       if(this.$route.params.userId !== undefined) {
         this.type = "edit";
-        this.user.userId = this.$route.params.userId;
+        this.user.code = this.$route.params.userId;
         this.$store.dispatch('common/setMenuTitle', "직원수정");
         this.readonly = true;
         new UserProxy()
-          .find(this.user.userId)
+          .find(this.user.code)
           .then((response) => {
             this.user = response.user;
-            this.setDeptTree(this.user.deptCode);
+            this.setDeptTree(this.user.depts[0]);
           });
       } else {
         this.type = "new";
@@ -97,16 +98,22 @@
             if(this.type === "new") {
               if(confirm("등록하시겠습니까?")) {
                 this.user.status = "OK";
+                this.user.uuid = this.user.code;
                 new UserProxy()
                   .create(this.user)
                   .then((response) => {
-                    if(response.header.returnCode === "OK") {
+                    new MongoProxy()
+                    .create({
+                      left_table: "users",
+                      left_uuid: this.user.code,
+                      right_table: "depts",
+                      right_uuid: this.user.deptCode
+                    })
+                    .then((response) => {
                       Vue.router.push({
                         name: 'Organization'
                       });
-                    } else {
-                      alert(response.header.resultMessages);
-                    }
+                    })
                   });
               }
             } else {
@@ -139,8 +146,8 @@
         history.back();
       },
       handleNodeClick(data) {
-        this.user.deptCode = data.deptCode;
-        this.user.deptName = data.deptName;
+        this.user.deptCode = data.uuid;
+        this.user.deptName = data.name;
       },
       setDeptTree(deptCode) {
         new DeptProxy()
@@ -163,12 +170,12 @@
             new UserProxy()
               .find(value)
               .then((response) => {
-                if (response.header.returnCode === "DUPLICATE_USER_ID") {
-                  callback();
-                } else {
-                  console.log(response);
-                  callback(new Error('이미 사용중인 사번입니다.'));
-                }
+                console.log(response);
+                callback(new Error('이미 사용중인 사번입니다.'));
+              })
+              .catch((e) => {
+                console.log('Request failed...', e);
+                callback();
               });
           }
         } else {
@@ -180,16 +187,26 @@
         type: '',     // edit:수정 , new:추가
         readonly: false,  // 수정화면에서 읽기전용필드 설정용
         user: {
-          userId: '',
-          userName: '',
+          uuid: '',
+          code: '',
+          name: '',
+          desc: '',
           deptCode: 'all',
+          deptName: '',
           status: 'OK',
+          useFlag: true,
+        },
+        relation: {
+          left_table: "",
+          left_uuid: "",
+          right_table: "",
+          right_uuid: ""
         },
         rules: {
-          userName: [
+          name: [
             { required: true, message: '이름을 입력하세요.', trigger: 'change' }
           ],
-          userId: [
+          code: [
             { required: true, validator: validateId, trigger: 'blur' }
           ],
         }

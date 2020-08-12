@@ -25,6 +25,15 @@ class UserProxy extends Proxy {
   me() {
     return this.submit('get', `${this.endpoint}/me`);
   }
+
+  /**
+   * 사용자 ID로 사용자의 sensor가져오기
+   * @param userId
+   * @returns {Promise}
+   */
+  getSensorsByUserId(userId) {
+    return this.submit('get', `${this.endpoint}/${userId}/sensors`);
+  }
 }
 
 export default UserProxy;

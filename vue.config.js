@@ -46,6 +46,11 @@ module.exports = {
         target: 'http://ec2-3-34-120-207.ap-northeast-2.compute.amazonaws.com:8000',
         ws: true,
         changeOrigin: true
+      },
+      '/mongo': {
+        target: 'http://ec2-3-34-120-207.ap-northeast-2.compute.amazonaws.com:8000',
+        ws: true,
+        changeOrigin: true
       }
     }
   }

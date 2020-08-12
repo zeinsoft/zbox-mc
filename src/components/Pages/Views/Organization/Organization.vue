@@ -61,7 +61,7 @@
               label="사용PC수"
               prop="sensors">
               <template slot-scope="props">
-                {{props.sensors.length}}
+                {{props.row.sensors != null ? props.row.sensors.length : 0}}
               </template>
             </el-table-column>
             <el-table-column
@@ -156,6 +156,7 @@
       PPagination,
     },
     created: function () {
+      // this.form.deptCode = this.$route.params.deptUuid;
       this.$store.dispatch('common/setMenuTitle', "조직도");
       this.changePage(1);
     },
@@ -180,14 +181,15 @@
       handleNodeClick(data) {
         this.selectedDept = data;
         this.form.deptCode = data.uuid;
+        // Vue.router.push({name: 'Organization', params: {deptUuid: data.uuid}});
         this.changePage(1);
       },
       showRow(row) {
         this.selectedUserId = row.userId;
-        this.$store.dispatch('sensor/findAll', {userId : row.userId});
+        this.$store.dispatch('sensor/findAll', {userId : row.uuid});
       },
       handleEdit(index, row) {
-        Vue.router.push({name: 'UserRegistration', params: {userId: row.userId}});
+        Vue.router.push({name: 'UserRegistration', params: {userId: row.uuid}});
       },
     },
     computed: {

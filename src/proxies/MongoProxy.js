@@ -1,17 +1,15 @@
 import Proxy from './Proxy';
 
-class SensorsProxy extends Proxy {
+class MongoProxy extends Proxy {
   /**
    * The constructor for the ArtistProxy.
    *
    * @param {Object} parameters The query parameters.
    */
   constructor(parameters = {}) {
-    super('v1/sensors', parameters);
+    super('mongo/relation', parameters);
   }
-
-  
 
 }
 
-export default SensorsProxy;
+export default MongoProxy;
