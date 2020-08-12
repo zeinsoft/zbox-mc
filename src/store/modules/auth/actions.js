@@ -16,30 +16,23 @@ export const check = ({ commit }) => {
 };
 
 export const login = ({ commit }, user) => {
-  new AuthProxy()
-    .publicKey()
+  new AuthProxy({filter_ : JSON.stringify({'uuid': user.adminId, 'password': user.password_plain})})
+    .login()
     .then((response) => {
-      const encrypt = new JSEncrypt();
-      encrypt.setPublicKey(response.publicKey);
-      user.password = encrypt.encrypt(user.password_plain);
-      new AuthProxy()
-        .login(user)
-        .then((response) => {
-          if(response.header.returnCode === "OK") {
-            commit(types.LOGIN, response.token);
-            store.dispatch('account/me');
-            Vue.router.push({
-              name: "StatusOverview"
-            });
-          } else {
-            alert(response.header.resultMessages);
-          }
-        })
-        .catch(() => {
-          console.log('Request failed...');
+      console.log(response);
+      if(response.result === "ok" && response.result_obj.length > 0) {
+        commit(types.LOGIN, response.result_obj[0]);
+        store.dispatch('account/me');
+        Vue.router.push({
+          name: "Organization"
         });
+      } else {
+        alert("로그인 정보를 다시 확인하세요.");
       }
-    )
+    })
+    .catch(() => {
+      console.log('Request failed...');
+    });
 };
 
 export const logout = ({ commit }) => {

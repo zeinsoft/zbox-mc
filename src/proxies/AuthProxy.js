@@ -7,7 +7,7 @@ class AuthProxy extends Proxy {
    * @param {Object} parameters The query parameters.
    */
   constructor(parameters = {}) {
-    super('api', parameters);
+    super('v1', parameters);
   }
 
   /**
@@ -18,13 +18,8 @@ class AuthProxy extends Proxy {
    *
    * @returns {Promise} The result in a promise.
    */
-  login({ adminId, password }) {
-    const data = {
-      adminId,
-      password,
-    };
-
-    return this.submit('post', `${this.endpoint}/common/login`, data);
+  login() {
+    return this.submit('get', `${this.endpoint}/admins`);
   }
 
   /**

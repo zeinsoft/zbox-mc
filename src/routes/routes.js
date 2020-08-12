@@ -100,6 +100,9 @@ const routes = [
       {
         path: 'organization',
         name: 'Organization',
+        meta: {
+          auth: true,
+        },
         component: Organization
       },
       {

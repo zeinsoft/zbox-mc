@@ -14,12 +14,12 @@
       <div>
         <collapse-transition>
           <ul class="nav nav-menu" v-show="!isClosed">
-            <li>
+            <!--<li>
               <a href="javascript:void(0)" @click.prevent="editInfo">
                 <span class="sidebar-mini-icon"><i class="fa fa-id-card-alt" aria-hidden="true"></i></span>
                 <span class="sidebar-normal">내정보 수정</span>
               </a>
-            </li>
+            </li>-->
             <li>
               <a href="javascript:void(0)" @click.prevent="logout">
                 <span class="sidebar-mini-icon"><i class="fa fa-sign-out-alt" aria-hidden="true"></i></span>

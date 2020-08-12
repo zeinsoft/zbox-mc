@@ -3,7 +3,8 @@ import store from '@/store';
 import * as types from './mutation-types';
 
 export const me = ({ commit }) => {
-  new UserProxy()
+  commit(types.ME);
+  /*new UserProxy()
     .me()
     .then((response) => {
       if(response.user.roleCode === "USER") {
@@ -14,7 +15,7 @@ export const me = ({ commit }) => {
       }
     })
     .catch(() => {
-    });
+    });*/
 };
 
 export const getMyMenus = ({ commit }) => {
