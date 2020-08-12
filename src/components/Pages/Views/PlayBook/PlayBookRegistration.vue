@@ -10,7 +10,7 @@
               </el-tag>
             </el-row>
             <el-row>
-              <el-button type="primary" v-if="type === 'new'" @click="submitForm('palybook')">부서 추가</el-button>
+              <el-button type="primary" v-if="type === 'new'" @click="addTarget()">부서 추가</el-button>
             </el-row>
           </el-form-item>
         </el-col>
@@ -22,7 +22,7 @@
               </el-tag>
             </el-row>
             <el-row>
-              <el-button type="primary" v-if="type === 'new'" @click="submitForm('palybook')">사용자 추가</el-button>
+              <el-button type="primary" v-if="type === 'new'" @click="addTarget()">사용자 추가</el-button>
             </el-row>
           </el-form-item>
         </el-col>
@@ -34,7 +34,7 @@
               </el-tag>
             </el-row>
             <el-row>
-              <el-button type="primary" v-if="type === 'new'" @click="submitForm('palybook')">센서 추가</el-button>
+              <el-button type="primary" v-if="type === 'new'" @click="addTarget()">센서 추가</el-button>
             </el-row>
           </el-form-item>
         </el-col>
@@ -80,11 +80,21 @@
         <el-button @click.prevent="historyBack">취소</el-button>
       </div>
     </el-form>
+    <modal :show.sync="modals.isShow"
+           footerClasses="justify-content-center"
+           type="notice"
+           modalClasses="modal-lg">
+      <h5 slot="header" class="modal-title">Target 등록</h5>
+      <template>
+        <organization :component-type="this.componentType"></organization>
+      </template>
+    </modal>
   </card>
 </template>
 
 <script>
   import Vue from 'vue'
+  import {Modal} from 'src/components/UIComponents'
   import {
     Tag,
     Select,
@@ -103,6 +113,7 @@
   import TaskProxy from "../../../../proxies/TaskProxy";
   import moment from 'moment-timezone'
   import VueMoment from "vue-moment";
+  import Organization from "../Organization/Organization";
 
   Vue.use(Table);
   Vue.use(TableColumn);
@@ -124,6 +135,8 @@
       elCol: Col,
       elSwitch: Switch,
       elTag: Tag,
+      Modal,
+      Organization,
     },
     created: function () {
       if (this.$route.params.uuid !== undefined) {
@@ -144,6 +157,9 @@
       }
     },
     methods: {
+      addTarget() {
+        this.modals.isShow = true;
+      },
       tableRowStyle() {
         return this.$store.state.common.tableHeaderCellStyle;
       },
@@ -177,6 +193,10 @@
     },
     data() {
       return {
+        componentType : "modal",
+        modals: {
+          isShow: false,
+        },
         type: '',     // edit:수정 , new:추가
         readonly: true,  // 수정화면에서 읽기전용필드 설정용
         palybook: {

@@ -13,6 +13,9 @@
             </el-row>
           </el-form>-->
           <dept-tree v-on:handleNodeClick="handleNodeClick" :default-dept-code="defaultDeptCode"></dept-tree>
+          <div class="pull-right">
+            <el-button type="primary" icon="el-icon-plus" v-if="componentType === 'modal'" v-on:click="addTarget('dept')">부서 추가</el-button>
+          </div>
         </card>
       </el-col>
       <el-col :span="18">
@@ -75,16 +78,21 @@
           </el-table>
           <el-row>
             <el-col :span="24">
-            <p-pagination class="pull-right"
-                          v-on:input="changePage"
-                          v-model="pagination.currentPage"
-                          :per-page="parseInt(pagination.perPage)"
-                          :total="$store.state.organization.total">
-            </p-pagination>
-          </el-col>
-            <el-col :span="24">
+              <p-pagination class="pull-right"
+                            v-on:input="changePage"
+                            v-model="pagination.currentPage"
+                            :per-page="parseInt(pagination.perPage)"
+                            :total="$store.state.organization.total">
+              </p-pagination>
+            </el-col>
+            <el-col :span="24" v-if="componentType !== 'modal'">
               <div class="pull-right">
                 <el-button type="primary" icon="el-icon-plus" v-on:click="register">직원 등록</el-button>
+              </div>
+            </el-col>
+            <el-col :span="24" v-if="componentType === 'modal'">
+              <div class="pull-right">
+                <el-button type="primary" icon="el-icon-plus" v-on:click="addTarget('user')">직원 추가</el-button>
               </div>
             </el-col>
           </el-row>
@@ -118,6 +126,11 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-col :span="24" v-if="componentType === 'modal'">
+            <div class="pull-right">
+              <el-button type="primary" icon="el-icon-plus" v-on:click="addTarget('sensor')">센서 추가</el-button>
+            </div>
+          </el-col>
         </card>
       </el-col>
     </el-row>
@@ -155,10 +168,14 @@
       elTableColumn : TableColumn,
       PPagination,
     },
+    props: {
+      componentType: String,
+    },
     created: function () {
       // this.form.deptCode = this.$route.params.deptUuid;
       this.$store.dispatch('common/setMenuTitle', "조직도");
       this.changePage(1);
+      console.log(this.componentType);
     },
     methods: {
       tableRowStyle() {
@@ -190,6 +207,9 @@
       },
       handleEdit(index, row) {
         Vue.router.push({name: 'UserRegistration', params: {userId: row.uuid}});
+      },
+      addTarget(targetType) {
+
       },
     },
     computed: {
