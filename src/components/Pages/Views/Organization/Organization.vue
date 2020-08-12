@@ -3,7 +3,7 @@
     <el-row :gutter="20">
       <el-col :span="6">
         <card>
-          <el-form class="form-horizontal" label-width="120px">
+          <!--<el-form class="form-horizontal" label-width="120px">
             <el-row>
               <el-col :span="24">
                 <el-form-item label="조직도" label-width="60px" prop="openDate">
@@ -11,7 +11,7 @@
                 </el-form-item>
               </el-col>
             </el-row>
-          </el-form>
+          </el-form>-->
           <dept-tree v-on:handleNodeClick="handleNodeClick" :default-dept-code="defaultDeptCode"></dept-tree>
         </card>
       </el-col>
@@ -41,26 +41,28 @@
             <el-table-column
               prop="deptName"
               label="부서명">
+              <template slot-scope="props">
+                   {{selectedDept.name}}
+              </template>
             </el-table-column>
             <el-table-column
               label="이름"
-              prop="userName">
+              prop="name">
               <template slot-scope="props">
                 <a href="javascript:void(0);" style="word-break: break-all;"
-                   @click="showRow(props.row)"> {{props.row.userName}}</a>
+                   @click="showRow(props.row)"> {{props.row.name}}</a>
               </template>
             </el-table-column>
             <el-table-column
               label="사번"
-              prop="userId">
+              prop="code">
             </el-table-column>
             <el-table-column
               label="사용PC수"
-              prop="sensorCount">
-            </el-table-column>
-            <el-table-column
-              label="대상PC수"
-              prop="targetSensorCount">
+              prop="sensors">
+              <template slot-scope="props">
+                {{props.sensors.length}}
+              </template>
             </el-table-column>
             <el-table-column
               label="관리"
@@ -155,7 +157,7 @@
     },
     created: function () {
       this.$store.dispatch('common/setMenuTitle', "조직도");
-      // this.changePage(1);
+      this.changePage(1);
     },
     methods: {
       tableRowStyle() {
@@ -176,7 +178,8 @@
         Vue.router.push({name: 'UserRegistration'});
       },
       handleNodeClick(data) {
-        this.form.deptCode = data.deptCode;
+        this.selectedDept = data;
+        this.form.deptCode = data.uuid;
         this.changePage(1);
       },
       showRow(row) {
@@ -191,6 +194,7 @@
     },
     data() {
       return {
+        selectedDept: null,
         defaultDeptCode: ["all"],
         selectedUserId : '',
         form: {

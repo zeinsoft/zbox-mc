@@ -7,7 +7,7 @@ class UserProxy extends Proxy {
    * @param {Object} parameters The query parameters.
    */
   constructor(parameters = {}) {
-    super('api/users', parameters);
+    super('v1/users', parameters);
   }
 
   /**

@@ -10,10 +10,6 @@ class MySensorsProxy extends Proxy {
     super('api/my-sensors', parameters);
   }
 
-  deptListByParentDeptCode(parentDeptCode) {
-    return this.find(parentDeptCode);
-  }
-
 }
 
 export default MySensorsProxy;

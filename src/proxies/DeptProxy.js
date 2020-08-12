@@ -11,11 +11,23 @@ class DeptProxy extends Proxy {
   }
 
   /**
-   * 로그인 사용자 정보 가져오기
+   * 상위 코드로 리스트 가져오기
    * @returns {Promise}
    */
-  deptListByParentDeptCode(parentDeptCode) {
-    return this.find(parentDeptCode);
+  deptListByParentDeptCode() {
+
+    return this.submit('get', `${this.endpoint}`);
+
+
+  }
+
+  /**
+   * 부서코드로 사용자 리스트 가져오기
+   * @param deptCode
+   * @returns {Promise}
+   */
+  getUsersByDeptCode(deptCode) {
+    return this.submit('get', `${this.endpoint}/${deptCode}/users`);
   }
 
   /**

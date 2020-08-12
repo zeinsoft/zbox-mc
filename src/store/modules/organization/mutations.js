@@ -6,8 +6,8 @@ import {
 export default {
 
   [LIST](state, response) {
-    state.accounts = response.accounts;
-    state.total = response.totalCnt;
+    state.accounts = response.result_obj;
+    // state.total = response.totalCnt;
   },
 
 

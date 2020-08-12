@@ -6,7 +6,7 @@
       :load="loadNode"
       lazy
       ref="deptTree"
-      node-key="deptCode"
+      node-key="code"
       :default-expanded-keys="defaultDeptCode"
       @node-click="handleNodeClick">
     </el-tree>
@@ -29,9 +29,9 @@
     },
     data() {
       return {
-        data: [{deptName: '전체', deptCode: 'all'}],
+        data: [{name: '전체', code: 'all', uuid: 'all'}],
         defaultProps: {
-          label: 'deptName',
+          label: 'name',
           children: 'zones',
           isLeaf: 'leaf'
         }
@@ -43,12 +43,12 @@
       },
       loadNode(node, resolve) {
         if (node.level === 0) {
-          return resolve([{deptName: '전체', deptCode: 'all'}]);
+          return resolve([{name: '전체', code: 'all', uuid: 'all'}]);
         }
-        new DeptProxy()
-          .deptListByParentDeptCode(node.data.deptCode)
+        new DeptProxy({filter_ : JSON.stringify({'parent_code':node.data.code})})
+          .deptListByParentDeptCode()
           .then((response) => {
-            resolve(response.depts);
+            resolve(response.result_obj);
           })
       }
     }
