@@ -6,7 +6,7 @@ import {
 export default {
 
   [LIST](state, response) {
-    state.sensors = response.sensors;
+    state.sensors = response.result_obj;
   },
 
 

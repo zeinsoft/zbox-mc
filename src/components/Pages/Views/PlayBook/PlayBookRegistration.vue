@@ -17,8 +17,8 @@
         <el-col :span="8">
           <el-form-item label="사용자 선택" prop="name">
             <el-row>
-              <el-tag v-for="tag in tags" :key="tag.name" closable :type="tag.type">
-                {{tag.name}}
+              <el-tag v-for="user in users" :key="user.name" closable :type="user.type">
+                {{user.name}}
               </el-tag>
             </el-row>
             <el-row>
@@ -29,8 +29,8 @@
         <el-col :span="8">
           <el-form-item label="센서 선택" prop="name">
             <el-row>
-              <el-tag v-for="tag in tags" :key="tag.name" closable :type="tag.type">
-                {{tag.name}}
+              <el-tag v-for="sensor in sensors" :key="sensor.agent_id" closable :type="sensor.type">
+                {{sensor.agent_id}}
               </el-tag>
             </el-row>
             <el-row>
@@ -86,7 +86,7 @@
            modalClasses="modal-lg">
       <h5 slot="header" class="modal-title">Target 등록</h5>
       <template>
-        <organization :component-type="this.componentType"></organization>
+        <organization v-on:selectTargetDept="selectTargetDept" v-on:selectTargetUser="selectTargetUser" v-on:selectTargetSensor="selectTargetSensor" :component-type="this.componentType"></organization>
       </template>
     </modal>
   </card>
@@ -190,6 +190,55 @@
       historyBack() {
         history.back();
       },
+      /**
+       * 부서 추가
+       * @param target
+       */
+      selectTargetDept(target) {
+        if(this.depts.length === 0) {
+          this.depts.push(target);
+        } else {
+          let duplicateCount = 0;
+          this.depts.forEach(s => {
+            if (s.code ===  target.code) {
+              duplicateCount++;
+            }
+          }, target.code);
+          if(duplicateCount === 0) this.depts.push(target);
+        }
+      },
+      selectTargetUser(target) {
+        if(this.users.length === 0) {
+          this.users = target;
+        } else {
+          target.forEach(t => {
+              let duplicateCount = 0;
+              this.users.forEach(s => {
+                if (s.code ===  t.code) {
+                  duplicateCount++;
+                }
+              }, t.code);
+              if(duplicateCount === 0) this.users.push(t);
+            }
+          )
+        }
+      },
+      selectTargetSensor(target) {
+        if(this.sensors.length === 0) {
+          this.sensors = target;
+        } else {
+          target.forEach(t => {
+              let duplicateCount = 0;
+              this.sensors.forEach(s => {
+                if (s.agent_id ===  t.agent_id) {
+                  duplicateCount++;
+                }
+              }, t.agent_id);
+              if(duplicateCount === 0) this.sensors.push(t);
+            }
+          )
+        }
+      }
     },
     data() {
       return {
@@ -217,10 +266,10 @@
           {name: 'Tag 51', type: 'info'}
         ],
         depts: [
-          {name: '지인소프트', code: 'zeinsoft'},
+          // {name: '지인소프트', code: 'zeinsoft'},
         ],
         users: [
-          {name: '홍길동', code: '1234'},
+          // {name: '홍길동', code: '1234'},
         ],
         sensors: [
         ],

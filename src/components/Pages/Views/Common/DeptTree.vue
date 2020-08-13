@@ -27,6 +27,9 @@
     props: {
       defaultDeptCode:null,
     },
+    created: function () {
+      this.$emit('handleNodeClick', this.data[0])
+    },
     data() {
       return {
         data: [{name: '전체', code: 'all', uuid: 'all'}],

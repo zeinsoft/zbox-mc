@@ -14,7 +14,7 @@
           </el-form>-->
           <dept-tree v-on:handleNodeClick="handleNodeClick" :default-dept-code="defaultDeptCode"></dept-tree>
           <div class="pull-right">
-            <el-button type="primary" icon="el-icon-plus" v-if="componentType === 'modal'" v-on:click="addTarget('dept')">부서 추가</el-button>
+            <el-button type="primary" icon="el-icon-plus" v-if="componentType === 'modal'" v-on:click="selectTarget('dept')">부서 추가</el-button>
           </div>
         </card>
       </el-col>
@@ -40,7 +40,14 @@
                     style="width: 100%; margin-bottom: 10px;"
                     :data="$store.state.organization.accounts"
                     :header-cell-style="tableRowStyle"
-                    ref="UserListTable">
+                    ref="UserListTable"
+                    @selection-change="handleSelectionChangeUser">
+            <el-table-column
+              v-if="componentType === 'modal'"
+              type="selection"
+              label="기능"
+              width="50">
+            </el-table-column>
             <el-table-column
               prop="deptName"
               label="부서명">
@@ -92,7 +99,7 @@
             </el-col>
             <el-col :span="24" v-if="componentType === 'modal'">
               <div class="pull-right">
-                <el-button type="primary" icon="el-icon-plus" v-on:click="addTarget('user')">직원 추가</el-button>
+                <el-button type="primary" icon="el-icon-plus" v-on:click="selectTarget('user')">직원 추가</el-button>
               </div>
             </el-col>
           </el-row>
@@ -102,14 +109,21 @@
                     style="width: 100%; margin-bottom: 10px;"
                     :data="$store.state.sensor.sensors"
                     :header-cell-style="tableRowStyle"
-                    ref="AgentListTable">
+                    ref="AgentListTable"
+                    @selection-change="handleSelectionChangeSensor">
+            <el-table-column
+              v-if="componentType === 'modal'"
+              type="selection"
+              label="기능"
+              width="50">
+            </el-table-column>
             <el-table-column
               label="에이전트ID"
-              prop="sensorId">
+              prop="agent_id">
             </el-table-column>
             <el-table-column
               label="IP"
-              prop="ipAddress">
+              prop="ip">
             </el-table-column>
             <el-table-column
               label="MAC"
@@ -117,18 +131,18 @@
             </el-table-column>
             <el-table-column
               label="컴퓨터명"
-              prop="hostName">
+              prop="hostname">
             </el-table-column>
             <el-table-column
               label="등록일">
               <template slot-scope="props">
-                {{ props.row.regDate | moment('YYYY-MM-DD')}}
+                {{ props.row.create_ts | moment('YYYY-MM-DD')}}
               </template>
             </el-table-column>
           </el-table>
           <el-col :span="24" v-if="componentType === 'modal'">
             <div class="pull-right">
-              <el-button type="primary" icon="el-icon-plus" v-on:click="addTarget('sensor')">센서 추가</el-button>
+              <el-button type="primary" icon="el-icon-plus" v-on:click="selectTarget('sensor')">센서 추가</el-button>
             </div>
           </el-col>
         </card>
@@ -178,6 +192,13 @@
       console.log(this.componentType);
     },
     methods: {
+      // 항목 선택
+      handleSelectionChangeUser(val) {
+        this.multipleSelectionUser = val;
+      },
+      handleSelectionChangeSensor(val) {
+        this.multipleSelectionSensor = val;
+      },
       tableRowStyle() {
         return this.$store.state.common.tableHeaderCellStyle;
       },
@@ -208,14 +229,27 @@
       handleEdit(index, row) {
         Vue.router.push({name: 'UserRegistration', params: {userId: row.uuid}});
       },
-      addTarget(targetType) {
-
+      selectTarget(targetType) {
+        switch (targetType) {
+          case "dept":
+            console.log(this.selectedDept)
+            this.$emit('selectTargetDept', this.selectedDept);
+            break;
+          case "user":
+            this.$emit('selectTargetUser', this.multipleSelectionUser);
+            break;
+          case "sensor":
+            this.$emit('selectTargetSensor', this.multipleSelectionSensor);
+            break;
+        }
       },
     },
     computed: {
     },
     data() {
       return {
+        multipleSelectionUser: [],
+        multipleSelectionSensor: [],
         selectedDept: null,
         defaultDeptCode: ["all"],
         selectedUserId : '',

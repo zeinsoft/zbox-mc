@@ -195,6 +195,8 @@
           deptName: '',
           status: 'OK',
           useFlag: true,
+          depts: [],
+          sensors: [],
         },
         relation: {
           left_table: "",
