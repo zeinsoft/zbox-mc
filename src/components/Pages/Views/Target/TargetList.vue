@@ -1,14 +1,18 @@
 <template>
   <div>
       <card>
-        <el-table id="UserListTable"
+        <el-table id="TargetListTable"
                   style="width: 100%; margin-bottom: 10px;"
-                  :data="$store.state.task.tasks"
+                  :data="$store.state.target.targets"
                   :header-cell-style="tableRowStyle"
-                  ref="UserListTable">
+                  ref="TargetListTable">
           <el-table-column
             label="이름"
             prop="name">
+          </el-table-column>
+          <el-table-column
+            label="내용"
+            prop="desc">
           </el-table-column>
           <el-table-column
             label="관리">
@@ -21,7 +25,7 @@
         <el-row>
           <el-col :span="24">
             <div class="pull-right">
-              <el-button type="primary" icon="el-icon-plus" v-on:click="register">PlayBook 등록</el-button>
+              <el-button type="primary" icon="el-icon-plus" v-on:click="register">Target 등록</el-button>
             </div>
           </el-col>
         </el-row>
@@ -38,7 +42,7 @@
   Vue.use(VueMoment)
 
   export default {
-      name: "PlayBookList",
+    name: "TargetList",
     components: {
       elCard: Card,
       elTabPane: TabPane,
@@ -53,7 +57,7 @@
       elTableColumn : TableColumn,
     },
     created: function () {
-      this.$store.dispatch('common/setMenuTitle', "PlayBook 리스트");
+      this.$store.dispatch('common/setMenuTitle', "Target 리스트");
       this.changePage();
     },
     methods: {
@@ -62,13 +66,11 @@
       },
       changePage() {
         let param = {
-          /*searchId: this.form.searchId,
-          searchName: encodeURI(encodeURIComponent(this.form.searchName)),*/
         };
-        this.$store.dispatch('playbook/findAll', param);
+        this.$store.dispatch('target/findAll', param);
       },
       handleEdit(index, row) {
-        Vue.router.push({name: 'TaskRegistration', params: {uuid: row.uuid}});
+        Vue.router.push({name: 'TargetView', params: {uuid: row.uuid}});
       },
       handleEditScript(index, row) {
         if(row.scripts.length > 0) {
@@ -78,14 +80,13 @@
         }
       },
       register() {
-        Vue.router.push({name: 'PlayBookRegistration'})
+        Vue.router.push({name: 'TargetRegistration'})
       },
     },
     computed: {
     },
     data() {
       return {
-        activeName: 'security1',
         form: {
           searchId: '',
           searchName: ''

@@ -11,6 +11,9 @@ const ScriptRegistration = () => import('src/components/Pages/Views/Task/ScriptR
 const PlayBookList = () => import('src/components/Pages/Views/PlayBook/PlayBookList.vue');
 const PlayBookRegistration = () => import('src/components/Pages/Views/PlayBook/PlayBookRegistration.vue');
 
+const TargetList = () => import('src/components/Pages/Views/Target/TargetList.vue');
+const TargetView = () => import('src/components/Pages/Views/Target/TargetView.vue');
+
 import Login from 'src/components/Pages/Views/Home/Login.vue';
 
 let loginPage = {
@@ -56,6 +59,39 @@ let tasks = {
       },
       component: ScriptRegistration
     }
+  ]
+}
+
+let targets = {
+  path: '/targets',
+  name: 'Targets',
+  component: DefaultLayout,
+  children: [
+    {
+      path: 'list',
+      name: 'TargetList',
+      meta: {
+        auth: true,
+      },
+      component: TargetList
+    },
+    {
+      path: 'registration',
+      name: "TargetRegistration",
+      meta: {
+        auth: true,
+      },
+      component: TargetView
+    },
+    {
+      path: ':uuid',
+      name: "TargetView",
+      meta: {
+        auth: true,
+      },
+      component: TargetView
+    },
+
   ]
 }
 
@@ -117,6 +153,7 @@ const routes = [
   },
   tasks,
   playbooks,
+  targets,
   loginPage,
   {path: '*', component: NotFound}
 ];

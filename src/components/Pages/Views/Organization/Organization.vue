@@ -187,7 +187,7 @@
     },
     created: function () {
       // this.form.deptCode = this.$route.params.deptUuid;
-      this.$store.dispatch('common/setMenuTitle', "조직도");
+      if(this.componentType !== 'modal') this.$store.dispatch('common/setMenuTitle', "조직도");
       this.changePage(1);
       console.log(this.componentType);
     },
