@@ -6,8 +6,7 @@ import {
 export default {
 
   [LIST](state, response) {
-    state.tasks = response.result_obj;
-    // state.total = response.totalCnt;
+    state.playbooks = response.result_obj;
   },
 
 

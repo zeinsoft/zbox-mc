@@ -10,6 +10,7 @@ const ScriptRegistration = () => import('src/components/Pages/Views/Task/ScriptR
 
 const PlayBookList = () => import('src/components/Pages/Views/PlayBook/PlayBookList.vue');
 const PlayBookRegistration = () => import('src/components/Pages/Views/PlayBook/PlayBookRegistration.vue');
+const PlayBookView = () => import('src/components/Pages/Views/PlayBook/PlayBookView.vue');
 
 const TargetList = () => import('src/components/Pages/Views/Target/TargetList.vue');
 const TargetView = () => import('src/components/Pages/Views/Target/TargetView.vue');
@@ -118,11 +119,11 @@ let playbooks = {
     },
     {
       path: ':uuid',
-      name: "PlayBookEdit",
+      name: "PlayBookView",
       meta: {
         auth: true,
       },
-      component: PlayBookRegistration
+      component: PlayBookView
     },
   ]
 }

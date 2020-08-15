@@ -3,7 +3,7 @@
       <card>
         <el-table id="UserListTable"
                   style="width: 100%; margin-bottom: 10px;"
-                  :data="$store.state.task.tasks"
+                  :data="$store.state.playbook.playbooks"
                   :header-cell-style="tableRowStyle"
                   ref="UserListTable">
           <el-table-column
@@ -62,13 +62,11 @@
       },
       changePage() {
         let param = {
-          /*searchId: this.form.searchId,
-          searchName: encodeURI(encodeURIComponent(this.form.searchName)),*/
         };
         this.$store.dispatch('playbook/findAll', param);
       },
       handleEdit(index, row) {
-        Vue.router.push({name: 'TaskRegistration', params: {uuid: row.uuid}});
+        Vue.router.push({name: 'PlayBookView', params: {uuid: row.uuid}});
       },
       handleEditScript(index, row) {
         if(row.scripts.length > 0) {
