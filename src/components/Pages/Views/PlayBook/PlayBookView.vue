@@ -12,6 +12,9 @@
           <el-form-item label="내용">
             <div id="jsonViewer" style="background-color: black;padding-left: 10px;"></div>
           </el-form-item>
+          <el-form-item label="내용">
+            <pre id="yamlViewer" style="padding-left: 10px;"></pre>
+          </el-form-item>
           <el-form-item label="Hash" prop="hash">
             <el-input v-model="playbook.hash"></el-input>
           </el-form-item>
@@ -48,6 +51,8 @@
   import VueMoment from "vue-moment";
   import {uuid} from 'vue-uuid';
   import JSONFormatter from 'json-formatter-js'
+  const YAML = require('json-to-pretty-yaml');
+
 
   Vue.use(Table);
   Vue.use(TableColumn);
@@ -81,6 +86,9 @@
         this.playbook.contents = JSON.stringify(JSON.parse(this.playbook.contents), undefined, 4);
         const formatter = new JSONFormatter(JSON.parse(this.playbook.contents), 10, {theme: 'dark'});
         document.getElementById("jsonViewer").appendChild(formatter.render());
+        const data = YAML.stringify(JSON.parse(this.playbook.contents));
+        console.log(data);
+        document.getElementById("yamlViewer").innerText =data;
       })
     },
     methods: {

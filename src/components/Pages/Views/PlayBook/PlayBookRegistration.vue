@@ -18,18 +18,29 @@
                 :value="item.uuid">
               </el-option>
             </el-select>
+            실행할 Task 선택
           </el-form-item>
-          <el-form-item label="arguments" prop="arguments">
+          <el-form-item label="parameters" prop="arguments">
             <el-input v-model="playbook.argument" type="textarea" :rows="4"></el-input>
+            <div>
+              parameters sample : {
+                "arg1" : "test"
+              }
+            </div>
           </el-form-item>
           <el-form-item label="server return">
             <el-switch v-model="playbook.serverReturn"></el-switch>
+            제품의 서버로 결과 전달 여부
           </el-form-item>
           <el-form-item label="server url" prop="url" v-if="playbook.serverReturn">
             <el-input v-model="playbook.url"></el-input>
+            <div>
+              결과 값을 전달할 서버 url
+            </div>
           </el-form-item>
           <el-form-item label="client return">
             <el-switch v-model="playbook.clientReturn"></el-switch>
+              제품의 agent web console로 결과 전달 여부
           </el-form-item>
           <el-form-item label="대상" prop="target">
             <el-select v-model="playbook.target" style="width: 100%;">
@@ -40,6 +51,7 @@
                 :value="item.uuid">
               </el-option>
             </el-select>
+            Target 리스트에 등록한 대상
           </el-form-item>
         </el-col>
       </el-row>
@@ -144,6 +156,9 @@
                 // task 설정
                 this.executeObject.executeId = uuid.v4();
                 this.executeObject.taskId = this.playbook.task;
+                if(this.playbook.argument !== '') {
+                  this.executeObject.parameters = JSON.parse(this.playbook.argument);
+                }
                 this.playBookObject.execute.push(this.executeObject);
 
                 this.playBookObject.transactionId = uuid.v4();
@@ -206,7 +221,7 @@
         },
         executeObject: {
           executeId : '',
-          parameters: '',
+          parameters: null,
           taskId : '',
           action : []
         },

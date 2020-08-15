@@ -20,6 +20,7 @@
     "jquery": "^3.4.1",
     "jsencrypt": "^3.0.0-rc.1",
     "json-formatter-js": "^2.3.4",
+    "json-to-pretty-yaml": "^1.2.2",
     "nprogress": "^0.2.0",
     "perfect-scrollbar": "0.7.1",
     "register-service-worker": "^1.5.2",
