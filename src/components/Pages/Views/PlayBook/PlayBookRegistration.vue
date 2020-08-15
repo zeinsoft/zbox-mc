@@ -2,42 +2,6 @@
   <card class="w-100">
     <el-form class="form-horizontal" :model="playbook" :rules="rules" ref="playbook" label-width="120px">
       <el-row>
-        <el-col :span="8">
-          <el-form-item label="부서 선택">
-            <el-row>
-              <el-tag v-for="dept in playbook.target.depts" :key="dept.code" closable>
-                {{dept.name}}
-              </el-tag>
-            </el-row>
-            <el-row>
-              <el-button type="primary" v-if="type === 'new'" @click="addTarget()">부서 추가</el-button>
-            </el-row>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="사용자 선택">
-            <el-row>
-              <el-tag v-for="user in playbook.target.users" :key="user.name" closable :type="user.type">
-                {{user.name}}
-              </el-tag>
-            </el-row>
-            <el-row>
-              <el-button type="primary" v-if="type === 'new'" @click="addTarget()">사용자 추가</el-button>
-            </el-row>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="센서 선택">
-            <el-row>
-              <el-tag v-for="sensor in playbook.target.sensors" :key="sensor.agent_id" closable :type="sensor.type">
-                {{sensor.agent_id}}
-              </el-tag>
-            </el-row>
-            <el-row>
-              <el-button type="primary" v-if="type === 'new'" @click="addTarget()">센서 추가</el-button>
-            </el-row>
-          </el-form-item>
-        </el-col>
         <el-col :span="24">
           <el-form-item label="이름" prop="name">
             <el-input v-model="playbook.name"></el-input>
@@ -67,6 +31,16 @@
           <el-form-item label="client return">
             <el-switch v-model="playbook.clientReturn"></el-switch>
           </el-form-item>
+          <el-form-item label="대상" prop="target">
+            <el-select v-model="playbook.target" style="width: 100%;">
+              <el-option
+                v-for="item in this.$store.state.target.targets"
+                :key="item.uuid"
+                :label="item.name"
+                :value="item.uuid">
+              </el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
       </el-row>
       <div class="card-footer text-right">
@@ -76,16 +50,6 @@
         <el-button @click.prevent="historyBack">취소</el-button>
       </div>
     </el-form>
-    <modal :show.sync="modals.isShow"
-           footerClasses="justify-content-center"
-           type="notice"
-           modalClasses="modal-lg">
-      <h5 slot="header" class="modal-title">Target 등록</h5>
-      <template>
-        <organization v-on:selectTargetDept="selectTargetDept" v-on:selectTargetUser="selectTargetUser"
-                      v-on:selectTargetSensor="selectTargetSensor" :component-type="this.componentType"></organization>
-      </template>
-    </modal>
   </card>
 </template>
 
@@ -108,9 +72,9 @@
     Switch
   } from 'element-ui';
   import TaskProxy from "../../../../proxies/TaskProxy";
+  import PlayBookProxy from "../../../../proxies/PlayBookProxy";
   import moment from 'moment-timezone'
   import VueMoment from "vue-moment";
-  import Organization from "../Organization/Organization";
   import {uuid} from 'vue-uuid';
 
   Vue.use(Table);
@@ -120,7 +84,7 @@
   })
 
   export default {
-    name: "UserManagementRegistration",
+    name: "PlayBookRegistration",
     components: {
       [DatePicker.name]: DatePicker,
       elSelect: Select,
@@ -134,7 +98,6 @@
       elSwitch: Switch,
       elTag: Tag,
       Modal,
-      Organization,
     },
     created: function () {
       if (this.$route.params.uuid !== undefined) {
@@ -156,6 +119,7 @@
       }
       let param = {};
       this.$store.dispatch('task/findAll', param);
+      this.$store.dispatch('target/findAll', param);
     },
     methods: {
       addTarget() {
@@ -181,18 +145,18 @@
                 this.executeObject.executeId = uuid.v4();
                 this.executeObject.taskId = this.playbook.task;
                 this.playBookObject.execute.push(this.executeObject);
-                // target 설정
-                if(this.playbook.target.depts.length > 0) {
-                  this.playBookObject.target.depts = this.playbook.target.depts;
-                }
-                if(this.playbook.target.users.length > 0) {
-                  this.playBookObject.target.users = this.playbook.target.users;
-                }
-                if(this.playbook.target.sensors.length > 0) {
-                  this.playBookObject.target.sensors = this.playbook.target.sensors;
-                }
+
                 this.playBookObject.transactionId = uuid.v4();
+
+                this.playBookObject.target = this.playbook.target;
                 console.log(JSON.stringify(this.playBookObject));
+
+                this.playBookParam.contents = JSON.stringify(this.playBookObject);
+                new PlayBookProxy()
+                .create(this.playBookParam)
+                .then((response) => {
+
+                });
               }
             } else {
               if (confirm("수정하시겠습니까?")) {
@@ -214,62 +178,6 @@
       historyBack() {
         history.back();
       },
-      /**
-       * 부서 추가
-       * @param target
-       */
-      selectTargetDept(target) {
-        if (this.playbook.target.depts.length === 0) {
-          this.playbook.target.depts.push(target);
-        } else {
-          let duplicateCount = 0;
-          this.playbook.target.depts.forEach(s => {
-            if (s.code === target.code) {
-              duplicateCount++;
-            }
-          }, target.code);
-          if (duplicateCount === 0) this.playbook.target.depts.push(target);
-        }
-      },
-      /**
-       * 사용자 선택
-       */
-      selectTargetUser(target) {
-        if (this.playbook.target.users.length === 0) {
-          this.playbook.target.users = target;
-        } else {
-          target.forEach(t => {
-              let duplicateCount = 0;
-              this.playbook.target.users.forEach(s => {
-                if (s.code === t.code) {
-                  duplicateCount++;
-                }
-              }, t.code);
-              if (duplicateCount === 0) this.playbook.target.users.push(t);
-            }
-          )
-        }
-      },
-      /**
-       * 센서 선택
-       * @param target
-       */
-      selectTargetSensor(target) {
-        if (this.playbook.target.sensors.length === 0) {
-          this.playbook.target.sensors = target;
-        } else {
-          target.forEach(t => {
-              let duplicateCount = 0;
-              this.playbook.target.sensors.forEach(s => {
-                if (s.agent_id === t.agent_id) {
-                  duplicateCount++;
-                }
-              }, t.agent_id);
-              if (duplicateCount === 0) this.playbook.target.sensors.push(t);
-            }
-          )
-        }
-      }
     },
     data() {
       return {
@@ -283,8 +191,8 @@
           func: "execute",
           transactionId: '',
           execute: [],
-          target: {},
-          schedule: {},
+          target: '',
+          schedule: '',
         },
         playbook: {
           name: '',
@@ -293,11 +201,7 @@
           serverReturn: false,
           clientReturn: false,
           url: '',
-          target: {
-            depts: [],
-            users: [],
-            sensors: []
-          },
+          target: '',
         },
         executeObject: {
           executeId : null,
@@ -314,6 +218,11 @@
         clientAction : {
           target: "client",
           type : "return",
+        },
+        playBookParam : {
+          uuid : '',
+          contents : '',
+          hash: '',
         },
         rules: {
           name: [
