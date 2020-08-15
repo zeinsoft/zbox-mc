@@ -204,8 +204,8 @@
           target: '',
         },
         executeObject: {
-          executeId : null,
-          parameters: null,
+          executeId : '',
+          parameters: '',
           taskId : '',
           action : []
         },
@@ -213,7 +213,7 @@
           target: "server",
           type : "restful",
           method : "post",
-          url : null,
+          url : '',
         },
         clientAction : {
           target: "client",
