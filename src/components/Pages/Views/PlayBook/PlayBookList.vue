@@ -11,10 +11,18 @@
             prop="name">
           </el-table-column>
           <el-table-column
+            label="등록일">
+            <template slot-scope="props">
+              {{ props.row.create_ts | moment('YYYY-MM-DD')}}
+            </template>
+          </el-table-column>
+          <el-table-column
             label="관리">
             <template slot-scope="props">
               <el-button type="success" icon="el-icon-edit" @click="handleEdit(props.$index, props.row)">
               </el-button>
+              <!--<el-button type="success" icon="el-icon-delete" @click="handleDelete(props.$index, props.row)">
+              </el-button>-->
             </template>
           </el-table-column>
         </el-table>
@@ -34,6 +42,7 @@
   import {Select, DatePicker, Form, FormItem, Table, TableColumn, Button, Row, Col, Input, Radio, Checkbox, Progress, TabPane, Tabs} from 'element-ui'
   import {Card} from 'src/components/UIComponents'
   import VueMoment from 'vue-moment'
+  import PlayBookProxy from "../../../../proxies/PlayBookProxy";
 
   Vue.use(VueMoment)
 
@@ -68,12 +77,15 @@
       handleEdit(index, row) {
         Vue.router.push({name: 'PlayBookView', params: {uuid: row.uuid}});
       },
-      handleEditScript(index, row) {
-        if(row.scripts.length > 0) {
-          Vue.router.push({name: 'PlayBookEdit', params: {uuid: row.uuid, scriptUuid: row.scripts[0]}});
-        } else {
-          Vue.router.push({name: 'PlayBookEdit', params: {uuid: row.uuid}});
+      handleDelete(index, row) {
+        if(confirm("삭제하시겠습니까?")) {
+          new PlayBookProxy()
+            .destroy(row.uuid)
+            .then((response) => {
+              this.changePage();
+            })
         }
+
       },
       register() {
         Vue.router.push({name: 'PlayBookRegistration'})

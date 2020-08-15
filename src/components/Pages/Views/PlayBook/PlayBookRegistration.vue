@@ -152,10 +152,11 @@
                 console.log(JSON.stringify(this.playBookObject));
 
                 this.playBookParam.contents = JSON.stringify(this.playBookObject);
+                this.playBookParam.name = this.playbook.name;
                 new PlayBookProxy()
                 .create(this.playBookParam)
                 .then((response) => {
-
+                  Vue.router.push({name: 'PlayBookList'});
                 });
               }
             } else {
@@ -220,6 +221,7 @@
           type : "return",
         },
         playBookParam : {
+          name: '',
           uuid : '',
           contents : '',
           hash: '',
