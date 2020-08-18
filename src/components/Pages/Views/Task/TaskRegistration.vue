@@ -1,6 +1,6 @@
 <template>
   <card class="w-100">
-    <el-form class="form-horizontal" :model="task" ref="task" label-width="120px">
+    <el-form class="form-horizontal" :model="task" :rules="rules" ref="task" label-width="120px">
       <el-row>
         <el-col :span="24">
           <el-form-item label="이름" prop="name">
@@ -9,10 +9,10 @@
           <el-form-item label="설명" prop="desc">
             <el-input v-model="task.desc" type="textarea" :rows="3"></el-input>
           </el-form-item>
-          <el-form-item label="생성일" prop="create_ts">
+          <el-form-item label="생성일" prop="create_ts" v-if="type === 'edit'">
             <el-input v-model="task.create_ts_text" :readonly="readonly"></el-input>
           </el-form-item>
-          <el-form-item label="수정일" prop="update_ts">
+          <el-form-item label="수정일" prop="update_ts" v-if="type === 'edit'">
             <el-input v-model="task.update_ts_text" :readonly="readonly"></el-input>
           </el-form-item>
         </el-col>
@@ -81,7 +81,7 @@
           if (valid) {
             if(this.type === "new") {
               if(confirm("등록하시겠습니까?")) {
-                this.$store.dispatch("task/createUser", this.task);
+                this.$store.dispatch("task/create", this.task);
               }
             } else {
               if(confirm("수정하시겠습니까?")) {

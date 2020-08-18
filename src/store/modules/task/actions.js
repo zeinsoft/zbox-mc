@@ -33,17 +33,17 @@ export const create = ({ commit }, param) => {
   new TaskProxy()
     .create(param)
     .then((response) => {
-      if(response.header.returnCode === "OK") {
-        Vue.router.push({
-          name: 'User'
-        });
-      } else {
-        alert(response.header.resultMessages);
-      }
+      Vue.router.push({
+        name: 'TaskList'
+      });
+    }).catch((e) => {
+      console.log(e);
+      alert(e.detail);
     });
 };
 
 
 export default {
   findAll,
+  create,
 };

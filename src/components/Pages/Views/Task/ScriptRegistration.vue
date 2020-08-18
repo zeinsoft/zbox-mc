@@ -1,7 +1,7 @@
 <template>
   <card class="w-100">
 
-    <el-form class="form-horizontal" :model="script" ref="script" label-width="120px">
+    <el-form class="form-horizontal" :model="script" :rules="rules" ref="script" label-width="120px">
       <el-row>
         <el-col :span="24">
           <el-form-item label="이름" prop="name">
@@ -25,10 +25,10 @@
           <el-form-item label="hash" prop="hash">
             <el-input v-model="script.hash" :readonly="readonly"></el-input>
           </el-form-item>
-          <el-form-item label="생성일" prop="create_ts">
+          <el-form-item label="생성일" prop="create_ts" v-if="type === 'edit'">
             <el-input v-model="script.create_ts_text" :readonly="readonly"></el-input>
           </el-form-item>
-          <el-form-item label="수정일" prop="update_ts">
+          <el-form-item label="수정일" prop="update_ts" v-if="type === 'edit'">
             <el-input v-model="script.update_ts_text" :readonly="readonly"></el-input>
           </el-form-item>
 
@@ -73,6 +73,7 @@
       elSwitch: Switch,
     },
     created: function () {
+      this.script.taskUUID = this.$route.params.uuid;
       if(this.$route.params.scriptUuid !== undefined) {
         this.type = "edit";
         this.script.uuid = this.$route.params.scriptUuid;
@@ -100,7 +101,7 @@
           if (valid) {
             if(this.type === "new") {
               if(confirm("등록하시겠습니까?")) {
-                this.$store.dispatch("script/createUser", this.script);
+                this.$store.dispatch("script/create", this.script);
               }
             } else {
               if(confirm("수정하시겠습니까?")) {
@@ -131,11 +132,12 @@
         changePassword: false,  // 수정화면에서 비밀번호 수정여부
         idLabel: "아이디",
         script: {
+          taskUUID: '',
           uuid: '',
           name: '',
           desc: '',
           revision: '',
-          arguments: '',
+          arguments: [],
           engine: '',
           contents: '',
           hash: '',
@@ -143,21 +145,21 @@
           update_ts_text: '',
           prods: [],
           tasks: [],
-        }
-        /*rules: {
-          adminName: [
+        },
+        rules: {
+          name: [
             { required: true, message: '이름을 입력하세요.', trigger: 'change' }
           ],
-          adminId: [
-            { required: true, validator: validateId, trigger: 'blur' }
+          revision: [
+            { required: true, message: '버전을 입력하세요.', trigger: 'change' }
           ],
-          password: [
-            { required: true, validator: validatePass, trigger: 'blur' }
+          engine: [
+            { required: true, message: 'engine을 입력하세요.', trigger: 'change' }
           ],
-          passwordRetry: [
-            { required: true, validator: validatePass2, trigger: 'blur' }
+          contents: [
+            { required: true, message: '내용을 입력하세요.', trigger: 'change' }
           ],
-        }*/
+        }
       }
     },
 
