@@ -163,7 +163,7 @@
 
                 this.playBookObject.transactionId = uuid.v4();
 
-                this.playBookObject.target = this.playbook.target;
+                this.playBookObject.target.id.push(this.playbook.target);
                 console.log(JSON.stringify(this.playBookObject));
 
                 this.playBookParam.contents = JSON.stringify(this.playBookObject);
@@ -207,7 +207,12 @@
           func: "execute",
           transactionId: '',
           execute: [],
-          target: '',
+          target: {
+            id: [],
+            agent: [],
+            user: [],
+            dept: [],
+          },
           schedule: '',
         },
         playbook: {
