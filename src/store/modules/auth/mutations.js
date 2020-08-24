@@ -25,9 +25,9 @@ export default {
 
   [LOGIN](state, user) {
     state.authenticated = true;
-    $cookies.set('admin_id_token', user.uuid)
-    $cookies.set('admin_id', user.uuid)
-    $cookies.set('admin_name', user.name)
+    $cookies.set('admin_id_token', user.uuid, 0)
+    $cookies.set('admin_id', user.uuid, 0)
+    $cookies.set('admin_name', user.name, 0)
     Vue.$http.defaults.headers.common.Authorization = user.uuid;
     // Vue.$http.defaults.headers.common.Authorization = `${token}`;
   },
