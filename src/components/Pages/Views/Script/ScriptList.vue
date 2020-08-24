@@ -1,32 +1,11 @@
 <template>
   <div>
       <card>
-        <!--<el-row :gutter="10">
-          <form @submit.prevent="changePage()">
-            <el-col :span="5">
-              <div class="form-group">
-                <label>아이디</label>
-                <el-input v-model="form.searchId" placeholder="아이디"></el-input>
-              </div>
-            </el-col>
-            <el-col :span="5">
-              <div class="form-group">
-                <label>이름</label>
-                <el-input v-model="form.searchName" placeholder="이름"></el-input>
-              </div>
-            </el-col>
-            <el-col :span="14">
-              <div class="pull-right-top24">
-                <el-button type="primary" native-type="submit" icon="el-icon-search">검색</el-button>
-              </div>
-            </el-col>
-          </form>
-        </el-row>-->
-        <el-table id="TaskListTable"
+        <el-table id="ScriptListTable"
                   style="width: 100%; margin-bottom: 10px;"
-                  :data="$store.state.task.tasks"
+                  :data="$store.state.script.scripts"
                   :header-cell-style="tableRowStyle"
-                  ref="TaskListTable">
+                  ref="ScriptListTable">
           <el-table-column
             label="이름"
             prop="name">
@@ -42,9 +21,9 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="관리">
+            label="Script 관리">
             <template slot-scope="props">
-              <el-button type="success" icon="el-icon-edit" @click="handleEdit(props.$index, props.row)">
+              <el-button type="success" icon="el-icon-edit" @click="handleEditScript(props.$index, props.row)">
               </el-button>
             </template>
           </el-table-column>
@@ -52,7 +31,7 @@
         <el-row>
           <el-col :span="24">
             <div class="pull-right">
-              <el-button type="primary" icon="el-icon-plus" v-on:click="register">Task 등록</el-button>
+              <el-button type="primary" icon="el-icon-plus" v-on:click="register">Script 등록</el-button>
             </div>
           </el-col>
         </el-row>
@@ -69,7 +48,7 @@
   Vue.use(VueMoment)
 
   export default {
-      name: "UserManagement",
+      name: "ScriptList",
     components: {
       elCard: Card,
       elTabPane: TabPane,
@@ -84,7 +63,7 @@
       elTableColumn : TableColumn,
     },
     created: function () {
-      this.$store.dispatch('common/setMenuTitle', "Task 리스트");
+      this.$store.dispatch('common/setMenuTitle', "Script 리스트");
       this.changePage();
     },
     methods: {
@@ -96,13 +75,13 @@
           /*searchId: this.form.searchId,
           searchName: encodeURI(encodeURIComponent(this.form.searchName)),*/
         };
-        this.$store.dispatch('task/findAll', param);
+        this.$store.dispatch('script/findAll', param);
       },
-      handleEdit(index, row) {
-        Vue.router.push({name: 'TaskEdit', params: {uuid: row.uuid}});
+      handleEditScript(index, row) {
+        Vue.router.push({name: 'ScriptEdit', params: {uuid: row.uuid}});
       },
       register() {
-        Vue.router.push({name: 'TaskRegistration'})
+        Vue.router.push({name: 'ScriptRegistration'})
       },
     },
     computed: {

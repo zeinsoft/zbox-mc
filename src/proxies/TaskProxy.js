@@ -10,6 +10,15 @@ class TaskProxy extends Proxy {
     super('v1/tasks', parameters);
   }
 
+  /**
+   * Task에 포함된 script 리스트
+   * @param uuid
+   * @returns {Promise}
+   */
+  getScriptByTargetUUID(uuid) {
+    return this.submit('get', `${this.endpoint}/${uuid}/scripts`);
+  }
+
 }
 
 export default TaskProxy;

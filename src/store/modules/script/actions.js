@@ -18,6 +18,11 @@ export const create = ({ commit }, param) => {
     .create(param)
     .then((response) => {
       console.log(response);
+      Vue.router.push({
+        name: 'ScriptList'
+      });
+
+      /*
       new MongoProxy()
         .create({
           left_table: "tasks",
@@ -27,9 +32,9 @@ export const create = ({ commit }, param) => {
         })
         .then((response) => {
           Vue.router.push({
-            name: 'TaskList'//'TaskEdit', params: {userId: param.taskUUID}
+            name: 'ScriptList'
           });
-        })
+        })*/
 
     }).catch((e) => {
     console.log(e);

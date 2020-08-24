@@ -6,7 +6,9 @@ const UserRegistration = () => import('src/components/Pages/Views/Organization/U
 
 const TaskList = () => import('src/components/Pages/Views/Task/TaskList.vue');
 const TaskRegistration = () => import('src/components/Pages/Views/Task/TaskRegistration.vue');
-const ScriptRegistration = () => import('src/components/Pages/Views/Task/ScriptRegistration.vue');
+
+const ScriptList = () => import('src/components/Pages/Views/Script/ScriptList.vue');
+const ScriptRegistration = () => import('@/components/Pages/Views/Script/ScriptRegistration.vue');
 
 const PlayBookList = () => import('src/components/Pages/Views/PlayBook/PlayBookList.vue');
 const PlayBookRegistration = () => import('src/components/Pages/Views/PlayBook/PlayBookRegistration.vue');
@@ -60,6 +62,38 @@ let tasks = {
       },
       component: ScriptRegistration
     }
+  ]
+}
+
+let scripts = {
+  path: '/scripts',
+  name: 'Scripts',
+  component: DefaultLayout,
+  children: [
+    {
+      path: 'list',
+      name: 'ScriptList',
+      meta: {
+        auth: true,
+      },
+      component: ScriptList
+    },
+    {
+      path: 'registration',
+      name: "ScriptRegistration",
+      meta: {
+        auth: true,
+      },
+      component: ScriptRegistration
+    },
+    {
+      path: ':uuid',
+      name: "ScriptEdit",
+      meta: {
+        auth: true,
+      },
+      component: ScriptRegistration
+    },
   ]
 }
 
@@ -152,6 +186,7 @@ const routes = [
       },
     ]
   },
+  scripts,
   tasks,
   playbooks,
   targets,

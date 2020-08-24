@@ -73,10 +73,9 @@
       elSwitch: Switch,
     },
     created: function () {
-      this.script.taskUUID = this.$route.params.uuid;
-      if(this.$route.params.scriptUuid !== undefined) {
+      if(this.$route.params.uuid !== undefined) {
         this.type = "edit";
-        this.script.uuid = this.$route.params.scriptUuid;
+        this.script.uuid = this.$route.params.uuid;
         this.$store.dispatch('common/setMenuTitle', "Script 수정");
 
         new ScriptProxy()

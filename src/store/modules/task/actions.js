@@ -42,8 +42,22 @@ export const create = ({ commit }, param) => {
     });
 };
 
+/**
+ * Task에 포함된 script 리스트
+ * @param commit
+ * @param uuid
+ */
+export const getScriptByTargetUUID = ({ commit }, uuid) => {
+  new TaskProxy()
+    .getScriptByTargetUUID(uuid)
+    .then((response) => {
+      commit(types.SCRIPT_LIST, response);
+    });
+};
+
 
 export default {
   findAll,
   create,
+  getScriptByTargetUUID,
 };

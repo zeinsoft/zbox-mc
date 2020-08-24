@@ -5,6 +5,17 @@ export default [
     path: '/organization'
   },
   {
+    name: 'Script',
+    icon: 'fa fa-tasks',
+    children: [
+      {
+        name: 'Script 리스트',
+        icon: 'fa fa-tasks',
+        path: '/scripts/list'
+      },
+    ]
+  },
+  {
     name: 'Task',
     icon: 'fa fa-tasks',
     children: [
