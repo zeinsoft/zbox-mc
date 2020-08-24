@@ -13,9 +13,36 @@
           <el-form-item label="버전" prop="revision">
             <el-input v-model="script.revision"></el-input>
           </el-form-item>
-          <!--<el-form-item label="arguments" prop="arguments">
-            <el-input v-model="script.arguments"></el-input>
-          </el-form-item>-->
+          <el-form-item label="arguments" prop="arguments">
+            <el-table id="ArgumentListTable"
+                      style="width: 100%; margin-bottom: 10px;"
+                      :data="script.arguments"
+                      :header-cell-style="tableRowStyle"
+                      ref="ArgumentListTable">
+              <el-table-column
+                label="이름"
+                prop="value">
+                <template slot-scope="props">
+                  {{props.row}}
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="삭제">
+                <template slot-scope="props">
+                  <el-button type="success" icon="el-icon-delete" @click="deleteArgument(props.$index, props.row)">
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-row>
+              <el-col :span="20">
+                <el-input v-model="argument"></el-input>
+              </el-col>
+              <el-col :span="4">
+                <el-button type="primary" @click="addArgument()">추가</el-button>
+              </el-col>
+            </el-row>
+          </el-form-item>
           <el-form-item label="engine" prop="engine">
             <el-input v-model="script.engine"></el-input>
           </el-form-item>
@@ -122,6 +149,12 @@
       historyBack() {
         history.back();
       },
+      addArgument() {
+        this.script.arguments.push(this.argument);
+      },
+      deleteArgument(param) {
+        this.script.arguments.splice(this.script.arguments.indexOf(param), 1);
+      }
     },
     data() {
       return {
@@ -145,6 +178,7 @@
           prods: [],
           tasks: [],
         },
+        argument: '',
         rules: {
           name: [
             { required: true, message: '이름을 입력하세요.', trigger: 'change' }
