@@ -204,7 +204,7 @@
         type: '',     // edit:수정 , new:추가
         readonly: true,  // 수정화면에서 읽기전용필드 설정용
         playBookObject: {
-          func: "execute",
+          func: "inspect",
           transactionId: '',
           execute: [],
           target: {
