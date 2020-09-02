@@ -21,13 +21,21 @@
             <template slot-scope="props">
               <el-button type="success" icon="el-icon-edit" @click="handleEdit(props.$index, props.row)">
               </el-button>
-              <!--<el-button type="success" icon="el-icon-delete" @click="handleDelete(props.$index, props.row)">
-              </el-button>-->
+              <el-button type="success" icon="el-icon-video-play" @click="handleRun(props.$index, props.row)">
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
         <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
+            <p-pagination class="pull-right"
+                          v-on:input="changePage"
+                          v-model="pagination.currentPage"
+                          :per-page="parseInt(pagination.perPage)"
+                          :total="$store.state.organization.total">
+            </p-pagination>
+          </el-col>
+          <el-col :span="12">
             <div class="pull-right">
               <el-button type="primary" icon="el-icon-plus" v-on:click="register">PlayBook 등록</el-button>
             </div>
@@ -39,10 +47,11 @@
 
 <script>
   import Vue from 'vue'
-  import {Select, DatePicker, Form, FormItem, Table, TableColumn, Button, Row, Col, Input, Radio, Checkbox, Progress, TabPane, Tabs} from 'element-ui'
+  import {Form, FormItem, Table, TableColumn, Button, Input, Radio, Checkbox, TabPane, Tabs} from 'element-ui'
   import {Card} from 'src/components/UIComponents'
   import VueMoment from 'vue-moment'
   import PlayBookProxy from "../../../../proxies/PlayBookProxy";
+  import PPagination from 'src/components/UIComponents/Pagination.vue'
 
   Vue.use(VueMoment)
 
@@ -60,16 +69,17 @@
       elInput : Input,
       elTable : Table,
       elTableColumn : TableColumn,
+      PPagination,
     },
     created: function () {
       this.$store.dispatch('common/setMenuTitle', "PlayBook 리스트");
-      this.changePage();
+      this.changePage(1);
     },
     methods: {
       tableRowStyle() {
         return this.$store.state.common.tableHeaderCellStyle;
       },
-      changePage() {
+      changePage(page) {
         let param = {
         };
         this.$store.dispatch('playbook/findAll', param);
@@ -77,12 +87,21 @@
       handleEdit(index, row) {
         Vue.router.push({name: 'PlayBookView', params: {uuid: row.uuid}});
       },
+      handleRun(index, row) {
+        if(confirm("실행하시겠습니까?")) {
+          new PlayBookProxy()
+            .runPlayBook(row.uuid)
+            .then((response) => {
+              console.log(response);
+            })
+        }
+      },
       handleDelete(index, row) {
         if(confirm("삭제하시겠습니까?")) {
           new PlayBookProxy()
             .destroy(row.uuid)
             .then((response) => {
-              this.changePage();
+              this.changePage(1);
             })
         }
 
@@ -99,6 +118,11 @@
         form: {
           searchId: '',
           searchName: ''
+        },
+        pagination: {
+          perPage: 10,
+          currentPage: 1,
+          perPageOptions: [5, 10, 25, 50],
         },
       }
     }

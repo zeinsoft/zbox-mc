@@ -7,6 +7,7 @@ export default {
 
   [LIST](state, response) {
     state.playbooks = response.result_obj;
+
   },
 
 
