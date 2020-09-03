@@ -8,4 +8,5 @@
 export default {
   total: 0,
   playbooks: [],
+  playbook_results: [],
 };

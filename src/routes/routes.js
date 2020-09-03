@@ -11,6 +11,7 @@ const ScriptList = () => import('src/components/Pages/Views/Script/ScriptList.vu
 const ScriptRegistration = () => import('@/components/Pages/Views/Script/ScriptRegistration.vue');
 
 const PlayBookList = () => import('src/components/Pages/Views/PlayBook/PlayBookList.vue');
+const PlayBookLog = () => import('src/components/Pages/Views/PlayBook/PlayBookLog.vue');
 const PlayBookRegistration = () => import('src/components/Pages/Views/PlayBook/PlayBookRegistration.vue');
 const PlayBookView = () => import('src/components/Pages/Views/PlayBook/PlayBookView.vue');
 
@@ -158,6 +159,14 @@ let playbooks = {
         auth: true,
       },
       component: PlayBookView
+    },
+    {
+      path: ':transactionId/log',
+      name: "PlayBookLog",
+      meta: {
+        auth: true,
+      },
+      component: PlayBookLog
     },
   ]
 }

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import store from '@/store';
 import PlayBookProxy from "../../../proxies/PlayBookProxy";
+import PlayBookResultProxy from "../../../proxies/PlayBookResultProxy";
 import * as types from './mutation-types';
 
 export const findAll = ({ commit }, params) => {
@@ -43,7 +44,20 @@ export const create = ({ commit }, param) => {
     });
 };
 
+/**
+ * 플레이북 실행 로그
+ * @param commit
+ * @param param
+ */
+export const findAllPlayBookResult = ({ commit }, param) => {
+  new PlayBookResultProxy(param)
+    .all()
+    .then((response) => {
+      commit(types.PLAY_BOOK_RESULT_LIST, response);
+    })
+};
 
 export default {
   findAll,
+  findAllPlayBookResult
 };

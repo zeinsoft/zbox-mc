@@ -10,6 +10,16 @@
             label="이름"
             prop="name">
           </el-table-column>
+          <!--<el-table-column
+            label="contents"
+            prop="contents">
+          </el-table-column>-->
+          <el-table-column
+            label="transactionId">
+            <template slot-scope="props">
+              {{ getTransactionId(props.row.contents) }}
+            </template>
+          </el-table-column>
           <el-table-column
             label="등록일">
             <template slot-scope="props">
@@ -22,6 +32,8 @@
               <el-button type="success" icon="el-icon-edit" @click="handleEdit(props.$index, props.row)">
               </el-button>
               <el-button type="success" icon="el-icon-video-play" @click="handleRun(props.$index, props.row)">
+              </el-button>
+              <el-button type="success" icon="el-icon-notebook-2" @click="handleLog(props.$index, props.row)">
               </el-button>
             </template>
           </el-table-column>
@@ -96,6 +108,10 @@
             })
         }
       },
+      handleLog(index, row) {
+        console.log(JSON.parse(row.contents).transactionId);
+        Vue.router.push({name: 'PlayBookLog', params: {transactionId: JSON.parse(row.contents).transactionId}});
+      },
       handleDelete(index, row) {
         if(confirm("삭제하시겠습니까?")) {
           new PlayBookProxy()
@@ -109,6 +125,9 @@
       register() {
         Vue.router.push({name: 'PlayBookRegistration'})
       },
+      getTransactionId(contents) {
+        return JSON.parse(contents).transactionId;
+      }
     },
     computed: {
     },
