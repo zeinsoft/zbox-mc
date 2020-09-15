@@ -12,7 +12,7 @@
               </el-col>
             </el-row>
           </el-form>-->
-          <dept-tree v-on:handleNodeClick="handleNodeClick" :default-dept-code="defaultDeptCode"></dept-tree>
+          <dept-tree v-on:handleNodeClick="handleNodeClick" ref="deptTree" :default-dept-code="defaultDeptCode"></dept-tree>
           <div class="pull-right">
             <el-button type="primary" icon="el-icon-plus" v-if="componentType === 'modal'" v-on:click="selectTarget('dept')">부서 추가</el-button>
           </div>
@@ -153,13 +153,14 @@
 
 <script>
   import Vue from 'vue'
-  import {Select, DatePicker, Form, FormItem, Table, TableColumn, Button, Row, Col, Input, Radio, Checkbox, Progress, TabPane, Tabs} from 'element-ui'
+  import {Form, FormItem, Table, TableColumn, Button, Input, Radio, Checkbox, TabPane, Tabs} from 'element-ui'
   import {Card} from 'src/components/UIComponents'
   import InspectItemListComponent from "../Policy/InspectItemListComponent";
   import DeptTree from "../Common/DeptTree";
   import StatusSearchForm from "../Status/StatusSearchForm";
   import PPagination from 'src/components/UIComponents/Pagination.vue'
   import VueMoment from 'vue-moment'
+  import DeptProxy from "@/proxies/DeptProxy";
 
   Vue.use(VueMoment)
 
@@ -186,10 +187,20 @@
       componentType: String,
     },
     created: function () {
-      // this.form.deptCode = this.$route.params.deptUuid;
+      if(this.$route.query.deptUuid !== undefined) {
+        this.form.deptCode = this.$route.query.deptUuid;
+        new DeptProxy()
+          .find(this.form.deptCode)
+          .then((response) => {
+            this.selectedDept = response.result_obj;
+            this.setDeptTree(this.form.deptCode);
+          })
+      } else {
+        this.form.deptCode = "all";
+        this.selectedDept = {name: '전체', code: 'all', uuid: 'all'};
+      }
       if(this.componentType !== 'modal') this.$store.dispatch('common/setMenuTitle', "조직도");
       this.changePage(1);
-      console.log(this.componentType);
     },
     methods: {
       // 항목 선택
@@ -219,7 +230,6 @@
       handleNodeClick(data) {
         this.selectedDept = data;
         this.form.deptCode = data.uuid;
-        // Vue.router.push({name: 'Organization', params: {deptUuid: data.uuid}});
         this.changePage(1);
       },
       showRow(row) {
@@ -227,7 +237,7 @@
         this.$store.dispatch('sensor/findAll', {userId : row.uuid});
       },
       handleEdit(index, row) {
-        Vue.router.push({name: 'UserRegistration', params: {userId: row.uuid}});
+        Vue.router.push({name: 'UserView', params: {userId: row.uuid, deptUuid: this.form.deptCode}});
       },
       selectTarget(targetType) {
         switch (targetType) {
@@ -243,6 +253,20 @@
             break;
         }
       },
+      setDeptTree(deptCode) {
+        this.defaultDeptCode = [deptCode];
+        this.getDeptTree(deptCode);
+      },
+      getDeptTree(deptCode) {
+        new DeptProxy()
+          .find(deptCode)
+          .then((response) => {
+            this.defaultDeptCode.unshift(response.result_obj.parent_code);
+            if(response.result_obj.parent_code !== "all") {
+              this.getDeptTree(response.result_obj.parent_code);
+            }
+          });
+      }
     },
     computed: {
     },
@@ -251,12 +275,12 @@
         multipleSelectionUser: [],
         multipleSelectionSensor: [],
         selectedDept: null,
-        defaultDeptCode: ["all"],
+        defaultDeptCode: [],
         selectedUserId : '',
         form: {
           include: true,
           searchName: '',
-          deptCode: 'all',
+          deptCode: '',
         },
         pagination: {
           perPage: 10,

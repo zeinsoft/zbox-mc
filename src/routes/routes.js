@@ -3,6 +3,7 @@ import NotFound from '../components/GeneralViews/NotFoundPage.vue';
 
 const Organization = () => import('src/components/Pages/Views/Organization/Organization.vue');
 const UserRegistration = () => import('src/components/Pages/Views/Organization/UserRegistration.vue');
+const UserView = () => import('src/components/Pages/Views/Organization/UserView.vue');
 
 const TaskList = () => import('src/components/Pages/Views/Task/TaskList.vue');
 const TaskRegistration = () => import('src/components/Pages/Views/Task/TaskRegistration.vue');
@@ -192,6 +193,14 @@ const routes = [
           auth: true,
         },
         component: UserRegistration
+      },
+      {
+        path: 'organization/:deptUuid/:userId',
+        name: "UserView",
+        meta: {
+          auth: true,
+        },
+        component: UserView
       },
     ]
   },

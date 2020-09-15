@@ -14,13 +14,11 @@
 </template>
 
 <script>
-  import {Modal} from 'src/components/UIComponents'
   import {Tree} from 'element-ui';
   import DeptProxy from '@/proxies/DeptProxy';
 
   export default {
     components: {
-      Modal,
       elTree: Tree
     },
     name: "DeptTree",
@@ -28,7 +26,7 @@
       defaultDeptCode:null,
     },
     created: function () {
-      this.$emit('handleNodeClick', this.data[0])
+      // this.$emit('handleNodeClick', this.data[0])
     },
     data() {
       return {
