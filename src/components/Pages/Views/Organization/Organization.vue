@@ -104,7 +104,12 @@
             </el-col>
           </el-row>
         </card>
-        <card v-if="selectedUserId !== ''">
+        <modal :show.sync="modals.isShow"
+               footerClasses="justify-content-center"
+               type="notice"
+               modalClasses="modal-lg">
+          <h5 slot="header" class="modal-title">에이전트 리스트</h5>
+          <template>
           <el-table id="AgentListTable"
                     style="width: 100%; margin-bottom: 10px;"
                     :data="$store.state.sensor.sensors"
@@ -145,7 +150,8 @@
               <el-button type="primary" icon="el-icon-plus" v-on:click="selectTarget('sensor')">센서 추가</el-button>
             </div>
           </el-col>
-        </card>
+          </template>
+        </modal>
       </el-col>
     </el-row>
   </div>
@@ -161,6 +167,7 @@
   import PPagination from 'src/components/UIComponents/Pagination.vue'
   import VueMoment from 'vue-moment'
   import DeptProxy from "@/proxies/DeptProxy";
+  import {Modal} from 'src/components/UIComponents'
 
   Vue.use(VueMoment)
 
@@ -182,6 +189,7 @@
       elTable : Table,
       elTableColumn : TableColumn,
       PPagination,
+      Modal,
     },
     props: {
       componentType: String,
@@ -233,6 +241,7 @@
         this.changePage(1);
       },
       showRow(row) {
+          this.modals.isShow = true;
         this.selectedUserId = row.userId;
         this.$store.dispatch('sensor/findAll', {userId : row.uuid});
       },
@@ -272,6 +281,9 @@
     },
     data() {
       return {
+        modals: {
+          isShow: false,
+        },
         multipleSelectionUser: [],
         multipleSelectionSensor: [],
         selectedDept: null,
