@@ -26,8 +26,8 @@ class DeptProxy extends Proxy {
    * @param deptCode
    * @returns {Promise}
    */
-  getUsersByDeptCode(deptCode) {
-    return this.submit('get', `${this.endpoint}/${deptCode}/users`);
+  getUsersByDeptCode(params) {
+    return this.submit('get', `${this.endpoint}/${params.deptCode}/users`);
   }
 
   /**

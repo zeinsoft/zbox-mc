@@ -5,8 +5,9 @@ import DeptProxy from "../../../proxies/DeptProxy";
 import * as types from './mutation-types';
 
 export const findAll = ({ commit }, params) => {
-  new DeptProxy()
-    .getUsersByDeptCode(params.deptCode)
+  console.log(params);
+  new DeptProxy(params)
+    .getUsersByDeptCode(params)
     .then((response) => {
       commit(types.LIST, response);
     });

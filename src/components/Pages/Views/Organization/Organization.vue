@@ -223,13 +223,15 @@
       },
       changePage(page) {
         this.selectedUserId = '';
+        this.pagination.currentPage = page;
         let param = {
-          page: page,
+          skip: "0",
           searchName: encodeURI(encodeURIComponent(this.form.searchName)),
           deptCode : this.form.deptCode,
           subDeptYn: this.form.include ? "Y" : "N",
-          rows: this.pagination.perPage
+          limit: this.pagination.perPage
         };
+
         this.$store.dispatch('organization/findAll', param);
       },
       register() {
