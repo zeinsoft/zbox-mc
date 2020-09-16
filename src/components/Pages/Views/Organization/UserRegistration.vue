@@ -17,19 +17,6 @@
                 <el-form-item label="이름" prop="name">
                   <el-input v-model="user.name"></el-input>
                 </el-form-item>
-                <el-form-item label="부서명" v-if="type === 'edit'">
-                  <el-input  v-model="user.deptName" :readonly="readonly"></el-input>
-                </el-form-item>
-                <el-form-item label="상태" v-if="readonly">
-                  <el-select v-model="user.status">
-                    <el-option
-                      label="정상"
-                      value="OK"></el-option>
-                    <el-option
-                      label="삭제"
-                      value="REMOVE"></el-option>
-                  </el-select>
-                </el-form-item>
               </el-col>
             </el-row>
             <div class="card-footer text-right">
@@ -47,10 +34,9 @@
 
 <script>
   import Vue from 'vue'
-  import {Select, DatePicker, Form, FormItem, Button, Option, Input, Row, Col, Table, TableColumn, Switch} from 'element-ui';
+  import { Form, FormItem, Button, Option, Input, Row, Col, Table, TableColumn} from 'element-ui';
   import UserProxy from "../../../../proxies/UserProxy";
   import DeptTree from "../Common/DeptTree";
-  import DeptProxy from "../../../../proxies/DeptProxy";
   import MongoProxy from "../../../../proxies/MongoProxy";
 
   Vue.use(Table);
@@ -59,8 +45,6 @@
   export default {
     name: "UserRegistration",
     components: {
-      [DatePicker.name]: DatePicker,
-      elSelect: Select,
       elForm: Form,
       elFormItem: FormItem,
       elButton: Button,
@@ -68,25 +52,11 @@
       elInput: Input,
       elRow: Row,
       elCol: Col,
-      elSwitch: Switch,
       DeptTree,
     },
     created: function () {
-      if(this.$route.params.userId !== undefined) {
-        this.type = "edit";
-        this.user.code = this.$route.params.userId;
-        this.$store.dispatch('common/setMenuTitle', "직원수정");
-        this.readonly = true;
-        new UserProxy()
-          .find(this.user.code)
-          .then((response) => {
-            this.user = response.user;
-            this.setDeptTree(this.user.depts[0]);
-          });
-      } else {
         this.type = "new";
         this.$store.dispatch('common/setMenuTitle', "직원등록");
-      }
     },
     methods: {
       tableRowStyle() {
@@ -95,7 +65,6 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if(this.type === "new") {
               if(confirm("등록하시겠습니까?")) {
                 this.user.status = "OK";
                 this.user.uuid = this.user.code;
@@ -116,24 +85,6 @@
                     })
                   });
               }
-            } else {
-              if(confirm("수정하시겠습니까?")) {
-                this.user.regDate = null;
-                this.user.removeDate = null;
-                new UserProxy()
-                  .update(this.user.userId, this.user)
-                  .then((response) => {
-                    if(response.header.returnCode === "OK") {
-                        Vue.router.push({
-                          name: 'Organization'
-                        });
-                    } else {
-                      alert(response.header.resultMessages);
-                    }
-
-                  })
-              }
-            }
           } else {
             return false;
           }
@@ -149,17 +100,6 @@
         this.user.deptCode = data.uuid;
         this.user.deptName = data.name;
       },
-      setDeptTree(deptCode) {
-        new DeptProxy()
-          .getDeptPathList(deptCode)
-          .then((response) => {
-            let depts = [];
-            response.depts.forEach(s => {
-              depts.push(s);
-            });
-            this.defaultDeptCode = depts;
-          });
-      }
     },
     data() {
       let validateId = (rule, value, callback) => {
@@ -194,7 +134,7 @@
           deptCode: 'all',
           deptName: '',
           status: 'OK',
-          useFlag: true,
+          use_flag: true,
           depts: [],
           sensors: [],
         },

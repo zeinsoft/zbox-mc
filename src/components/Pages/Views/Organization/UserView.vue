@@ -34,9 +34,9 @@
             </el-row>
             <div class="card-footer text-right">
               <el-button type="primary" v-if="type === 'new'" @click="submitForm('user')">등록</el-button>
-              <el-button type="primary" v-if="type === 'edit'" @click="submitForm('user')">수정</el-button>
+              <!--<el-button type="primary" v-if="type === 'edit'" @click="submitForm('user')">수정</el-button>-->
               <el-button v-if="type === 'new'" @click.prevent="resetForm('user')">리셋</el-button>
-              <el-button @click.prevent="historyBack">취소</el-button>
+              <el-button @click.prevent="historyBack">뒤로가기</el-button>
             </div>
           </el-form>
         </card>
@@ -151,9 +151,9 @@
       },
       historyBack() {
         Vue.router.push({name: 'Organization', query: {deptUuid: this.deptUuid}});
-        // history.back();
       },
       handleNodeClick(data) {
+        console.log(data);
         this.user.deptCode = data.uuid;
         this.user.deptName = data.name;
       },
