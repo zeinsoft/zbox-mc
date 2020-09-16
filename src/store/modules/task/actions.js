@@ -2,6 +2,7 @@ import Vue from 'vue';
 import store from '@/store';
 import TaskProxy from "../../../proxies/TaskProxy";
 import * as types from './mutation-types';
+import MongoProxy from "@/proxies/MongoProxy";
 
 export const findAll = ({ commit }, params) => {
   new TaskProxy(params)
@@ -33,9 +34,20 @@ export const create = ({ commit }, param) => {
   new TaskProxy()
     .create(param)
     .then((response) => {
-      Vue.router.push({
-        name: 'TaskList'
-      });
+      new MongoProxy()
+        .create({
+          left_table: "tasks",
+          left_uuid: response.rest_input.uuid,
+          right_table: "prods",
+          right_uuid: param.prodUUid
+        })
+        .then((response) => {
+          Vue.router.push({
+            name: 'TaskList'
+          });
+        })
+
+
     }).catch((e) => {
       console.log(e);
       alert(e.detail);

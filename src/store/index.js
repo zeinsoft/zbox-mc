@@ -17,6 +17,7 @@ import task from './modules/task'
 import script from './modules/script'
 import playbook from './modules/playbook'
 import target from './modules/target'
+import product from './modules/product'
 
 const debug = process.env.NODE_ENV !== 'production';
 
@@ -40,6 +41,7 @@ export default new Vuex.Store({
     script,
     playbook,
     target,
+    product,
   },
 
   /**

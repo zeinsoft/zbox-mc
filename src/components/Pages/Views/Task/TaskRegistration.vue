@@ -4,6 +4,16 @@
       <el-form class="form-horizontal" :model="task" :rules="rules" ref="task" label-width="120px">
         <el-row>
           <el-col :span="24">
+            <el-form-item label="제품" prop="prodUUid">
+              <el-select v-model="task.prodUUid">
+                <el-option
+                  v-for="item in this.$store.state.product.prods"
+                  :key="item.uuid"
+                  :label="item.name"
+                  :value="item.uuid">
+                </el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="이름" prop="name">
               <el-input v-model="task.name"></el-input>
             </el-form-item>
@@ -110,6 +120,7 @@
       elSwitch: Switch,
     },
     created: function () {
+      this.$store.dispatch("product/findAll", {});
       if(this.$route.params.uuid !== undefined) {
         this.type = "edit";
         this.task.uuid = this.$route.params.uuid;
@@ -121,9 +132,8 @@
             this.task = response.result_obj;
             this.task.create_ts_text = moment(this.task.create_ts).format('YYYY-MM-DD');
             this.task.update_ts_text = moment(this.task.update_ts).format('YYYY-MM-DD');
+            this.task.prodUUid = this.task.prods[0];
             this.$store.dispatch("task/getScriptByTargetUUID", this.task.uuid);
-
-
             this.$store.dispatch("script/findAll", {});
           })
       } else {
@@ -186,6 +196,7 @@
         type: '',     // edit:수정 , new:추가
         readonly: true,  // 수정화면에서 읽기전용필드 설정용
         task: {
+          prodUUid: '',
           uuid: '',
           name: '',
           desc: '',
@@ -196,6 +207,9 @@
         },
         script: '',
         rules: {
+          prodUUid: [
+            { required: true, message: '제품을 선택하세요.', trigger: 'change' }
+          ],
           name: [
             { required: true, message: '이름을 입력하세요.', trigger: 'change' }
           ]

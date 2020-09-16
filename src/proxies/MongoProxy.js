@@ -10,6 +10,10 @@ class MongoProxy extends Proxy {
     super('mongo/relation', parameters);
   }
 
+  delete(params) {
+    return this.submit('delete', `${this.endpoint}`, params);
+  }
+
 }
 
 export default MongoProxy;
