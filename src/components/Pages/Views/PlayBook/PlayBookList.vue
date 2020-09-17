@@ -44,7 +44,7 @@
                           v-on:input="changePage"
                           v-model="pagination.currentPage"
                           :per-page="parseInt(pagination.perPage)"
-                          :total="$store.state.organization.total">
+                          :total="$store.state.playbook.total">
             </p-pagination>
           </el-col>
           <el-col :span="12">
@@ -93,6 +93,9 @@
       },
       changePage(page) {
         let param = {
+          sort : "[(create_ts, -1)]",
+          skip : (page - 1) * this.pagination.perPage,
+          limit : this.pagination.perPage
         };
         this.$store.dispatch('playbook/findAll', param);
       },
