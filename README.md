@@ -1,4 +1,4 @@
-# Gooroom FrontEnd
+# zbox management console
 
 ## Build Setup
 
