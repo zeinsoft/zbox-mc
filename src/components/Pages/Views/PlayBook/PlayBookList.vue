@@ -93,7 +93,7 @@
       },
       changePage(page) {
         let param = {
-          sort : "[(create_ts, -1)]",
+          sort : "[(\"create_ts\", -1)]",
           skip : (page - 1) * this.pagination.perPage,
           limit : this.pagination.perPage
         };
