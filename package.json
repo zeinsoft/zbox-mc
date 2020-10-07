@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.10.2",
+    "@johmun/vue-tags-input": "^2.1.0",
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.7.2",
@@ -17,7 +18,7 @@
     "element-ui": "^2.12.0",
     "fullcalendar": "^4.0.0-alpha.3",
     "google-maps": "^3.2.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.1",
     "jsencrypt": "^3.0.0-rc.1",
     "json-formatter-js": "^2.3.4",
     "json-to-pretty-yaml": "^1.2.2",
@@ -49,10 +50,10 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.0",
     "@vue/cli-plugin-pwa": "^3.4.0",
-    "@vue/cli-service": "^3.4.0",
+    "@vue/cli-service": "^4.5.6",
     "babel-plugin-component": "^1.1.1",
     "expose-loader": "^0.7.5",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.14.1",
     "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.6.6"
   },
