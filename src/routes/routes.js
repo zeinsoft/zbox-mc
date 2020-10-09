@@ -21,6 +21,14 @@ const TargetView = () => import('src/components/Pages/Views/Target/TargetView.vu
 
 import Login from 'src/components/Pages/Views/Home/Login.vue';
 
+import AgentLogin from 'src/components/Pages/Views/Agent/Login.vue';
+
+let agentLoginPage = {
+  path: '/agent',
+  name: 'AgentLogin',
+  component: AgentLogin
+};
+
 let loginPage = {
   path: '/login',
   name: 'Login',
@@ -209,6 +217,7 @@ const routes = [
   playbooks,
   targets,
   loginPage,
+  agentLoginPage,
   {path: '*', component: NotFound}
 ];
 
