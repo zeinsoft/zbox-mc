@@ -46,6 +46,8 @@
     created: function () {
       this.form.ssoKey = this.$route.query.sso_key;
       this.form.pcId = this.$route.query.pc_id;
+
+      this.$store.dispatch('connectSocket');
     },
     methods: {
         getError (fieldName) {

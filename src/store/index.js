@@ -18,6 +18,7 @@ import script from './modules/script'
 import playbook from './modules/playbook'
 import target from './modules/target'
 import product from './modules/product'
+import agentLogin from './modules/agentLogin'
 
 const debug = process.env.NODE_ENV !== 'production';
 
@@ -42,6 +43,9 @@ export default new Vuex.Store({
     playbook,
     target,
     product,
+
+    agentLogin
+
   },
 
   /**

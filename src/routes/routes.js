@@ -66,7 +66,7 @@ let tasks = {
     },
     {
       path: ':uuid/scripts/:scriptUuid',
-      name: "ScriptRegistration",
+      name: "ScriptView",
       meta: {
         auth: true,
       },
