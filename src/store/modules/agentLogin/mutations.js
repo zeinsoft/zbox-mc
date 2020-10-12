@@ -35,5 +35,6 @@ export default {
   [SOCKET_RECONNECT_ERROR](state) {
     console.info(state, "컴보이 실행이 필요하다는 메시지 보여주기");
     state.socket.reconnectError = true;
+    alert("Z-BOX 에이전트를 실행해주세요!");
   },
 };
