@@ -23,7 +23,7 @@ export default {
     console.error(state, event);
   },
   [SOCKET_ONMESSAGE] (state, message)  {
-    // console.info(state, message);
+    console.info(state, message);
     state.socket.message = message;
     switch (state.socket.message.func) {
 

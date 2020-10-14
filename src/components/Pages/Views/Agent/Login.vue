@@ -55,7 +55,7 @@
         },
         validate (form) {
             this.$validator.validateAll().then(isValid => {
-                if(isValid) this.$store.dispatch('auth/login', form);
+                if(isValid) this.$store.dispatch('agentLogin', form);
             })
         }
     },

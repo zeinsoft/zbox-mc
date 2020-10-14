@@ -1,10 +1,25 @@
 import Vue from 'vue';
 import store from '@/store';
 import VueNativeSock from "vue-native-websocket";
+import * as types from "@/store/modules/inspectItem/mutation-types";
 
 export const sendMessage = ({ commit }, message) => {
   console.log(message);
   Vue.prototype.$socket.sendObj(message)
+};
+
+export const agentLogin = ({ commit }, param) => {
+  console.log(param);
+  let login = {
+    func: "is_valid_login",
+    params: {
+      user_name: param.userName,
+      user_code: param.userId,
+      pc_id: param.pcId,
+      sso_key: param.ssoKey,
+    }
+    }
+  store.dispatch('sendMessage', login);
 };
 
 /**
@@ -29,4 +44,5 @@ export const connectSocket = ({ commit }) => {
 export default {
   sendMessage,
   connectSocket,
+  agentLogin,
 };
