@@ -1,4 +1,5 @@
-# zbox management console
+# zBox MC
+zbox management console
 
 ## Build Setup
 
