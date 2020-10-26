@@ -67,9 +67,14 @@ export const getScriptByTargetUUID = ({ commit }, uuid) => {
     });
 };
 
+export const resetScriptByTarget = ({ commit }) => {
+  commit(types.RESET_SCRIPT_LIST);
+};
+
 
 export default {
   findAll,
   create,
   getScriptByTargetUUID,
+  resetScriptByTarget,
 };

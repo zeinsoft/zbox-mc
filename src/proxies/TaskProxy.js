@@ -19,6 +19,15 @@ class TaskProxy extends Proxy {
     return this.submit('get', `${this.endpoint}/${uuid}/scripts`);
   }
 
+  /**
+   * Task에 포함된 osversions 리스트
+   * @param uuid
+   * @returns {Promise}
+   */
+  getOsVersionsByTargetUUID(uuid) {
+    return this.submit('get', `${this.endpoint}/${uuid}/osversions`);
+  }
+
 }
 
 export default TaskProxy;

@@ -36,6 +36,18 @@
             prop="desc">
           </el-table-column>
           <el-table-column
+            label="OS">
+            <template slot-scope="props">
+              {{ props.row.osversions.length }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="script">
+            <template slot-scope="props">
+              {{ props.row.scripts.length }}
+            </template>
+          </el-table-column>
+          <el-table-column
             label="등록일">
             <template slot-scope="props">
               {{ props.row.create_ts | moment('YYYY-MM-DD')}}

@@ -11,6 +11,7 @@ import admin from './modules/admin';
 import organization from './modules/organization'
 import sensor from './modules/sensor'
 import config from './modules/config'
+import osversion from './modules/osversion'
 
 
 import task from './modules/task'
@@ -36,6 +37,7 @@ export default new Vuex.Store({
     organization,
     sensor,
     config,
+    osversion,
 
 
     task,

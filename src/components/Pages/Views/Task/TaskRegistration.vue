@@ -36,13 +36,13 @@
         </div>
       </el-form>
     </card>
-    <div>
+    <div v-if="this.type === 'edit'">
       <card>
-        <el-table id="TaskListTable"
+        <el-table id="ScriptListTable"
                   style="width: 100%; margin-bottom: 10px;"
                   :data="$store.state.task.scripts"
                   :header-cell-style="tableRowStyle"
-                  ref="TaskListTable">
+                  ref="ScriptListTable">
           <el-table-column
             label="이름"
             prop="name">
@@ -67,7 +67,7 @@
         </el-table>
       </card>
     </div>
-    <card class="w-100">
+    <card class="w-100" v-if="this.type === 'edit'">
       <el-form class="form-horizontal" :model="task" :ref="task" label-width="120px">
         <el-row>
           <el-col :span="24">
@@ -88,6 +88,80 @@
         </div>
       </el-form>
     </card>
+    <card class="w-100" v-if="this.type === 'edit'">
+      <el-form class="form-horizontal" label-width="120px">
+        <template>
+          <el-table id="OsVersionList"
+                    style="width: 100%; margin-bottom: 10px;"
+                    :data="this.osversions"
+                    :header-cell-style="tableRowStyle"
+                    ref="OsVersionList"
+                    @selection-change="handleOSSelectionChange">
+            <el-table-column
+              type="selection"
+              width="55">
+            </el-table-column>
+            <el-table-column
+              label="system"
+              prop="system">
+            </el-table-column>
+            <el-table-column
+              label="name"
+              prop="name">
+            </el-table-column>
+            <el-table-column
+              label="release"
+              prop="release">
+            </el-table-column>
+          </el-table>
+          <el-col :span="24">
+            <div class="pull-right">
+              <el-button type="primary" icon="el-icon-plus" v-on:click="addOsVersion()">OS 삭제</el-button>
+              <el-button type="primary" @click="addOS()">OS 추가</el-button>
+            </div>
+          </el-col>
+        </template>
+        <div class="card-footer text-right">
+
+        </div>
+      </el-form>
+    </card>
+    <modal :show.sync="modals.isShow"
+           footerClasses="justify-content-center"
+           type="notice"
+           modalClasses="modal-lg">
+      <h5 slot="header" class="modal-title">OS버전 리스트</h5>
+      <template>
+        <el-table id="OsVersionListTable"
+                  style="width: 100%; margin-bottom: 10px;"
+                  :data="$store.state.osversion.osversions"
+                  :header-cell-style="tableRowStyle"
+                  ref="OsVersionListTable"
+                  @selection-change="handleOSSelectionChange">
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column
+            label="system"
+            prop="system">
+          </el-table-column>
+          <el-table-column
+            label="name"
+            prop="name">
+          </el-table-column>
+          <el-table-column
+            label="release"
+            prop="release">
+          </el-table-column>
+        </el-table>
+        <el-col :span="24">
+          <div class="pull-right">
+            <el-button type="primary" icon="el-icon-plus" v-on:click="addOsVersion()">OS 추가</el-button>
+          </div>
+        </el-col>
+      </template>
+    </modal>
   </div>
 </template>
 
@@ -98,6 +172,8 @@
   import MongoProxy from "@/proxies/MongoProxy";
   import moment from 'moment-timezone'
   import VueMoment from "vue-moment";
+  import {Modal} from 'src/components/UIComponents'
+  import * as types from "@/store/modules/task/mutation-types";
 
   Vue.use(Table);
   Vue.use(TableColumn);
@@ -118,6 +194,7 @@
       elRow: Row,
       elCol: Col,
       elSwitch: Switch,
+      Modal,
     },
     created: function () {
       this.$store.dispatch("product/findAll", {});
@@ -135,16 +212,23 @@
             this.task.prodUUid = this.task.prods[0];
             this.$store.dispatch("task/getScriptByTargetUUID", this.task.uuid);
             this.$store.dispatch("script/findAll", {});
-          })
+            this.getOsVersions();
+          });
+
+        // OS 정보 가져오기
+
       } else {
         this.type = "new";
         this.$store.dispatch('common/setMenuTitle', "Task 등록");
+        this.$store.dispatch("task/resetScriptByTarget");
       }
+      this.$store.dispatch("osversion/findAll");
     },
     methods: {
       tableRowStyle() {
         return this.$store.state.common.tableHeaderCellStyle;
       },
+      // Task 저장
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -166,15 +250,19 @@
           }
         });
       },
+      // 입력내용 초기화
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
+      // 리스트로 이동
       historyBack() {
         history.back();
       },
+      // script 수정화면으로 이동
       handleEditScript(index, row) {
         Vue.router.push({name: 'ScriptEdit', params: {uuid: row.uuid}});
       },
+      // script 추가
       addScript() {
         if(confirm("Script를 추가하시겠습니까?")) {
           new MongoProxy()
@@ -188,11 +276,45 @@
               this.$store.dispatch("task/getScriptByTargetUUID", this.task.uuid);
             })
         }
-
       },
+      // OS 선택창 띄우기
+      addOS() {
+        this.modals.isShow = true;
+      },
+      // OS 선택
+      handleOSSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+      // OS 추가
+      addOsVersion() {
+        this.multipleSelection.forEach(os => {
+          new MongoProxy()
+            .create({
+              left_table: "tasks",
+              left_uuid: this.task.uuid,
+              right_table: "osversions",
+              right_uuid: os.uuid
+            })
+            .then((response) => {
+            })
+        });
+        this.modals.isShow = false;
+        this.getOsVersions();
+      },
+      getOsVersions() {
+        new TaskProxy()
+          .getOsVersionsByTargetUUID(this.task.uuid)
+          .then((response) => {
+            this.osversions = response.result_obj;
+          });
+      }
     },
     data() {
       return {
+        modals: {
+          isShow: false,
+        },
+        multipleSelection: [],
         type: '',     // edit:수정 , new:추가
         readonly: true,  // 수정화면에서 읽기전용필드 설정용
         task: {
@@ -205,6 +327,7 @@
           create_ts_text: '',
           update_ts_text: '',
         },
+        osversions : [],
         script: '',
         rules: {
           prodUUid: [
