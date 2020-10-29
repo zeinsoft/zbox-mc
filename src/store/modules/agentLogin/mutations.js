@@ -26,7 +26,11 @@ export default {
     console.info(state, message);
     state.socket.message = message;
     switch (state.socket.message.func) {
-
+      case "is_valid_login":
+        if(!state.socket.message.result.vaild) {
+          alert("로그인정보를 다시 확인해주세요.")
+        }
+        break;
     }
   },
   [SOCKET_RECONNECT](state, count) {
