@@ -10,7 +10,14 @@ class SensorsProxy extends Proxy {
     super('v1/sensors', parameters);
   }
 
-  
+  /**
+   * 센서 uuid로 OS버전 정보 가져오기
+   * @param uuid
+   * @returns {Promise}
+   */
+  getOsVersionsBySensorUUID(uuid) {
+    return this.submit('get', `${this.endpoint}/${uuid}/osversions`);
+  }
 
 }
 

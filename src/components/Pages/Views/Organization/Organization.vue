@@ -3,15 +3,6 @@
     <el-row :gutter="20">
       <el-col :span="6">
         <card>
-          <!--<el-form class="form-horizontal" label-width="120px">
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="조직도" label-width="60px" prop="openDate">
-                  <el-checkbox v-model="form.include">하위부서포함</el-checkbox>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>-->
           <dept-tree v-on:handleNodeClick="handleNodeClick" ref="deptTree" :default-dept-code="defaultDeptCode"></dept-tree>
           <div class="pull-right">
             <el-button type="primary" icon="el-icon-plus" v-if="componentType === 'modal'" v-on:click="selectTarget('dept')">부서 추가</el-button>
@@ -125,6 +116,10 @@
             <el-table-column
               label="에이전트ID"
               prop="agent_id">
+              <template slot-scope="props">
+                <a href="javascript:void(0);" style="word-break: break-all;"
+                   @click="showOsVersion(props.row)"> {{props.row.agent_id}}</a>
+              </template>
             </el-table-column>
             <el-table-column
               label="IP"
@@ -152,6 +147,32 @@
           </el-col>
           </template>
         </modal>
+
+        <modal :show.sync="modals.isOsVersionShow"
+               footerClasses="justify-content-center"
+               type="notice"
+               modalClasses="modal-lg">
+          <h5 slot="header" class="modal-title">OS 정보</h5>
+          <template>
+            <el-form class="form-horizontal" :model="osversion" label-width="120px">
+              <el-form-item label="name" prop="name">
+                <el-input v-model="osversion.name"></el-input>
+              </el-form-item>
+              <el-form-item label="system" prop="system">
+                <el-input v-model="osversion.system"></el-input>
+              </el-form-item>
+              <el-form-item label="release" prop="release">
+                <el-input v-model="osversion.release"></el-input>
+              </el-form-item>
+              <el-form-item label="version" prop="version">
+                <el-input v-model="osversion.version"></el-input>
+              </el-form-item>
+              <div class="pull-right mt-2">
+                <el-button icon="el-icon-close" v-on:click="showModal(false)">닫기</el-button>
+              </div>
+            </el-form>
+          </template>
+        </modal>
       </el-col>
     </el-row>
   </div>
@@ -168,6 +189,7 @@
   import VueMoment from 'vue-moment'
   import DeptProxy from "@/proxies/DeptProxy";
   import {Modal} from 'src/components/UIComponents'
+  import SensorsProxy from "@/proxies/SensorsProxy";
 
   Vue.use(VueMoment)
 
@@ -243,7 +265,7 @@
         this.changePage(1);
       },
       showRow(row) {
-          this.modals.isShow = true;
+        this.modals.isShow = true;
         this.selectedUserId = row.userId;
         this.$store.dispatch('sensor/findAll', {userId : row.uuid});
       },
@@ -277,7 +299,18 @@
               this.getDeptTree(response.result_obj.parent_code);
             }
           });
-      }
+      },
+      showOsVersion(row) {
+        new SensorsProxy()
+        .getOsVersionsBySensorUUID(row.uuid)
+        .then((response) => {
+          this.osversion = response.result_obj[0];
+          this.modals.isOsVersionShow = true;
+        })
+      },
+      showModal(isShow) {
+        this.modals.isOsVersionShow = isShow;
+      },
     },
     computed: {
     },
@@ -285,6 +318,7 @@
       return {
         modals: {
           isShow: false,
+          isOsVersionShow: false,
         },
         multipleSelectionUser: [],
         multipleSelectionSensor: [],
@@ -301,6 +335,7 @@
           currentPage: 1,
           perPageOptions: [5, 10, 25, 50],
         },
+        osversion: {},
       }
     }
   }
