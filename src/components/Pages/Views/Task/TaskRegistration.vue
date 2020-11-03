@@ -20,6 +20,22 @@
             <el-form-item label="설명" prop="desc">
               <el-input v-model="task.desc" type="textarea" :rows="3"></el-input>
             </el-form-item>
+            <el-form-item label="System">
+              <el-select v-model="task.os_spec.system">
+                <el-option
+                  label="없음"
+                  v-model="this.nullValue"></el-option>
+                <el-option
+                  label="Linux"
+                  value="Linux"></el-option>
+                <el-option
+                  label="Windows"
+                  value="Windows"></el-option>
+                <el-option
+                  label="Mac"
+                  value="Mac"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="생성일" prop="create_ts" v-if="type === 'edit'">
               <el-input v-model="task.create_ts_text" :readonly="readonly"></el-input>
             </el-form-item>
@@ -88,7 +104,7 @@
         </div>
       </el-form>
     </card>
-    <card class="w-100" v-if="this.type === 'edit'">
+    <!--<card class="w-100" v-if="this.type === 'edit'">
       <el-form class="form-horizontal" label-width="120px">
         <template>
           <el-table id="OsVersionList"
@@ -125,7 +141,7 @@
 
         </div>
       </el-form>
-    </card>
+    </card>-->
     <modal :show.sync="modals.isShow"
            footerClasses="justify-content-center"
            type="notice"
@@ -326,6 +342,12 @@
           scripts: [],
           create_ts_text: '',
           update_ts_text: '',
+          os_spec : {
+            system: null,
+            name: null,
+            release: null,
+            version: null
+          },
         },
         osversions : [],
         script: '',
@@ -336,7 +358,8 @@
           name: [
             { required: true, message: '이름을 입력하세요.', trigger: 'change' }
           ]
-        }
+        },
+        nullValue : null,
       }
     },
 
