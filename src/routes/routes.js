@@ -19,6 +19,9 @@ const PlayBookView = () => import('src/components/Pages/Views/PlayBook/PlayBookV
 const TargetList = () => import('src/components/Pages/Views/Target/TargetList.vue');
 const TargetView = () => import('src/components/Pages/Views/Target/TargetView.vue');
 
+const ProductList = () => import('src/components/Pages/Views/Product/ProductList.vue');
+const ProductView = () => import('src/components/Pages/Views/Product/ProductView.vue');
+
 import Login from 'src/components/Pages/Views/Home/Login.vue';
 
 import AgentLogin from 'src/components/Pages/Views/Agent/Login.vue';
@@ -180,6 +183,39 @@ let playbooks = {
   ]
 }
 
+let products = {
+  path: '/products',
+  name: 'Products',
+  component: DefaultLayout,
+  redirect: '/products/list',
+  children: [
+    {
+      path: 'list',
+      name: 'ProductList',
+      meta: {
+        auth: true,
+      },
+      component: ProductList
+    },
+    {
+      path: 'registration',
+      name: "ProductRegistration",
+      meta: {
+        auth: true,
+      },
+      component: ProductView
+    },
+    {
+      path: ':uuid',
+      name: "ProductView",
+      meta: {
+        auth: true,
+      },
+      component: ProductView
+    },
+  ]
+}
+
 const routes = [
   {
     path: '/',
@@ -212,6 +248,7 @@ const routes = [
       },
     ]
   },
+  products,
   scripts,
   tasks,
   playbooks,

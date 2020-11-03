@@ -5,6 +5,11 @@ export default [
     path: '/organization'
   },
   {
+    name: '제품관리',
+    icon: 'fa fa-microchip',
+    path: '/products'
+  },
+  {
     name: 'Script',
     icon: 'fa fa-tasks',
     children: [
