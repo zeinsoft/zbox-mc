@@ -348,6 +348,7 @@
             release: null,
             version: null
           },
+          osversions: []
         },
         osversions : [],
         script: '',
