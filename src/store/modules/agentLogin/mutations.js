@@ -28,7 +28,9 @@ export default {
     switch (state.socket.message.func) {
       case "is_valid_login":
         if(!state.socket.message.result.vaild) {
-          alert("로그인정보를 다시 확인해주세요.")
+          alert("로그인정보를 다시 확인해주세요.");
+        } else {
+          alert("로그인 되었습니다.");
         }
         break;
     }
