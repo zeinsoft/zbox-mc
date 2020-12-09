@@ -67,7 +67,7 @@
           if (valid) {
               if(confirm("등록하시겠습니까?")) {
                 this.user.status = "OK";
-                this.user.uuid = this.user.code;
+                // this.user.uuid = this.user.code;
                 new UserProxy()
                   .create(this.user)
                   .then((response) => {
