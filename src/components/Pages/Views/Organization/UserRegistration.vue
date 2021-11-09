@@ -74,7 +74,7 @@
                     new MongoProxy()
                     .create({
                       left_table: "users",
-                      left_uuid: this.user.code,
+                      left_uuid: response.rest_input.uuid,
                       right_table: "depts",
                       right_uuid: this.user.deptCode
                     })
